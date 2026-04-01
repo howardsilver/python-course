@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Foundations — Course Hub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg:        #0f1117;
+    --bg2:       #181c27;
+    --bg3:       #1e2333;
+    --border:    rgba(255,255,255,0.07);
+    --border2:   rgba(255,255,255,0.13);
+    --purple:    #7c6ff7;
+    --purple-lt: #a99df9;
+    --purple-bg: rgba(124,111,247,0.12);
+    --teal:      #34d399;
+    --teal-bg:   rgba(52,211,153,0.10);
+    --amber:     #fbbf24;
+    --amber-bg:  rgba(251,191,36,0.10);
+    --coral:     #f87171;
+    --blue:      #60a5fa;
+    --blue-bg:   rgba(96,165,250,0.10);
+    --text:      #e2e4ed;
+    --text2:     #8b8fa8;
+    --text3:     #555974;
+    --mono:      'DM Mono', monospace;
+    --sans:      'DM Sans', sans-serif;
+    --radius:    10px;
+    --radius-lg: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -.01em;
+  }
+  .nav-logo span { color: var(--purple-lt); }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .streak-pill {
+    display: flex; align-items: center; gap: 7px;
+    background: var(--amber-bg); border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 12px; font-weight: 500; color: var(--amber);
+  }
+  .streak-dots { display: flex; gap: 4px; }
+  .s-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(251,191,36,0.2); }
+  .s-dot.on { background: var(--amber); }
+  .xp-pill {
+    background: var(--purple-bg); border: 1px solid rgba(124,111,247,0.2);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 12px; font-weight: 500; color: var(--purple-lt);
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 860px; margin: 0 auto; padding: 36px 28px 80px; }
+
+  /* ── HERO ── */
+  .hero { margin-bottom: 32px; }
+  .hero h1 { font-size: 26px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .hero p  { font-size: 14px; color: var(--text2); }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .stat {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+  }
+  .stat-val { font-size: 22px; font-weight: 600; color: #fff; line-height: 1.1; }
+  .stat-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  /* ── OVERALL PROGRESS ── */
+  .overall { margin-bottom: 32px; }
+  .bar-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 7px; }
+  .bar-bg { height: 7px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--purple); border-radius: 4px; transition: width .5s ease; }
+
+  /* ── CONTINUE CARD ── */
+  .continue-card {
+    background: var(--purple-bg);
+    border: 1px solid rgba(124,111,247,0.25);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    text-decoration: none;
+    transition: border-color .2s;
+    cursor: pointer;
+  }
+  .continue-card:hover { border-color: rgba(124,111,247,0.5); }
+  .continue-icon {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--purple); display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .continue-icon svg { width: 18px; height: 18px; }
+  .continue-body { flex: 1; }
+  .continue-label { font-size: 11px; color: var(--purple-lt); font-weight: 500; margin-bottom: 2px; }
+  .continue-title { font-size: 15px; font-weight: 500; color: #fff; }
+  .continue-meta  { font-size: 12px; color: var(--purple-lt); margin-top: 2px; }
+  .continue-arrow { font-size: 20px; color: var(--purple-lt); }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--text3);
+    margin-bottom: 12px; margin-top: 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-label:first-child { margin-top: 0; }
+  .phase-progress { font-size: 11px; color: var(--text3); font-weight: 400; letter-spacing: 0; text-transform: none; }
+
+  /* ── PHASE HEADER ── */
+  .phase { margin-bottom: 28px; }
+  .phase-hdr {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .phase-pill {
+    font-size: 11px; font-weight: 500; padding: 3px 10px;
+    border-radius: 20px; border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .ph1 { background: var(--purple-bg); color: var(--purple-lt); border-color: rgba(124,111,247,0.2); }
+  .ph2 { background: var(--teal-bg);   color: var(--teal);      border-color: rgba(52,211,153,0.2); }
+  .ph3 { background: var(--amber-bg);  color: var(--amber);     border-color: rgba(251,191,36,0.2); }
+  .ph4 { background: rgba(248,113,113,0.1); color: var(--coral); border-color: rgba(248,113,113,0.2); }
+  .ph5 { background: var(--blue-bg);   color: var(--blue);      border-color: rgba(96,165,250,0.2); }
+
+  .phase-name { font-size: 15px; font-weight: 500; color: var(--text); }
+  .phase-count { font-size: 12px; color: var(--text3); margin-left: auto; }
+
+  /* ── MODULE GRID ── */
+  .mod-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 8px;
+  }
+
+  .mod-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 13px 15px;
+    text-decoration: none;
+    display: block;
+    transition: border-color .15s, background .15s;
+    position: relative;
+  }
+  .mod-card.clickable { cursor: pointer; }
+  .mod-card.clickable:hover { border-color: var(--border2); background: var(--bg3); }
+  .mod-card.completed {
+    border-color: rgba(52,211,153,0.3);
+    background: rgba(52,211,153,0.04);
+  }
+  .mod-card.active {
+    border-color: rgba(124,111,247,0.5);
+    border-width: 1.5px;
+  }
+  .mod-card.locked { opacity: .38; cursor: default; }
+
+  .mod-num {
+    font-size: 11px; font-weight: 500; margin-bottom: 5px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .num-ph1 { color: var(--purple-lt); }
+  .num-ph2 { color: var(--teal); }
+  .num-ph3 { color: var(--amber); }
+  .num-ph4 { color: var(--coral); }
+  .num-ph5 { color: var(--blue); }
+
+  .check { width: 13px; height: 13px; border-radius: 50%; background: var(--teal); display: inline-flex; align-items: center; justify-content: center; }
+  .check svg { width: 8px; height: 8px; }
+  .lock { width: 11px; height: 11px; opacity: .5; }
+
+  .mod-title {
+    font-size: 12px; font-weight: 500; color: var(--text);
+    line-height: 1.4; margin-bottom: 7px;
+  }
+  .mod-card.completed .mod-title { color: var(--teal); }
+
+  .mod-footer { display: flex; justify-content: space-between; align-items: center; }
+  .mod-time { font-size: 11px; color: var(--text3); }
+  .mod-badge {
+    font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 8px;
+  }
+  .b-setup  { background: var(--blue-bg);   color: var(--blue); }
+  .b-quiz   { background: var(--teal-bg);   color: var(--teal); }
+  .b-game   { background: var(--amber-bg);  color: var(--amber); }
+  .b-proj   { background: var(--purple-bg); color: var(--purple-lt); }
+  .b-road   { background: rgba(248,113,113,0.1); color: var(--coral); }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* ── RESET SECTION ── */
+  .dev-section {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    margin-top: 40px;
+  }
+  .dev-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .dev-desc { font-size: 13px; color: var(--text2); margin-bottom: 12px; line-height: 1.5; }
+  .dev-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-reset {
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    padding: 7px 14px; border-radius: var(--radius);
+    cursor: pointer; border: 1px solid rgba(248,113,113,0.3);
+    background: rgba(248,113,113,0.08); color: var(--coral);
+    transition: background .15s, border-color .15s;
+  }
+  .btn-reset:hover { background: rgba(248,113,113,0.15); border-color: rgba(248,113,113,0.5); }
+  .btn-ghost {
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    padding: 7px 14px; border-radius: var(--radius);
+    cursor: pointer; border: 1px solid var(--border2);
+    background: var(--bg3); color: var(--text2);
+    transition: background .15s;
+  }
+  .btn-ghost:hover { background: var(--bg2); color: var(--text); }
+
+  /* ── CONFIRM DIALOG ── */
+  .confirm-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    align-items: center; justify-content: center;
+  }
+  .confirm-overlay.show { display: flex; }
+  .confirm-box {
+    background: var(--bg2); border: 1px solid var(--border2);
+    border-radius: var(--radius-lg); padding: 24px 28px;
+    max-width: 360px; width: 90%;
+  }
+  .confirm-title { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+  .confirm-desc  { font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
+  .confirm-btns  { display: flex; gap: 8px; justify-content: flex-end; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 540px) {
+    .page { padding: 24px 16px 60px; }
+    nav { padding: 12px 16px; }
+    .stats-row { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .hero h1 { font-size: 22px; }
+    .xp-pill { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Python <span>Foundations</span></div>
+  <div class="nav-right">
+    <div class="streak-pill">
+      <div class="streak-dots" id="streak-dots"></div>
+      <span id="streak-count">0</span> day streak
+    </div>
+    <div class="xp-pill" id="xp-display">0 XP</div>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1 id="greeting">Welcome to Python Foundations</h1>
+    <p>Career-track · 24 modules · 16 weeks · self-paced</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-val" id="stat-done">0</div>
+      <div class="stat-lbl">modules done</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-left">24</div>
+      <div class="stat-lbl">remaining</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-xp">0</div>
+      <div class="stat-lbl">XP earned</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-pct">0%</div>
+      <div class="stat-lbl">complete</div>
+    </div>
+  </div>
+
+  <!-- OVERALL PROGRESS -->
+  <div class="overall">
+    <div class="bar-row">
+      <span>Overall progress</span>
+      <span id="bar-label">0 / 24 modules</span>
+    </div>
+    <div class="bar-bg">
+      <div class="bar-fill" id="overall-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- CONTINUE CARD -->
+  <a class="continue-card" id="continue-card" href="module-01.html">
+    <div class="continue-icon">
+      <svg viewBox="0 0 18 18" fill="none">
+        <path d="M6 4l6 5-6 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="continue-body">
+      <div class="continue-label">Continue learning</div>
+      <div class="continue-title" id="continue-title">Module 1 — Your dev environment</div>
+      <div class="continue-meta" id="continue-meta">Phase 1 · Setup · ~45 min</div>
+    </div>
+    <div class="continue-arrow">→</div>
+  </a>
+
+  <!-- PHASES -->
+  <div id="phases-container"></div>
+
+  <!-- DIVIDER -->
+  <hr>
+
+  <!-- DEV / TESTING TOOLS -->
+  <div class="dev-section">
+    <div class="dev-label">Testing tools</div>
+    <div class="dev-desc">Reset all progress back to zero. Use this while testing the course before your son starts.</div>
+    <div class="dev-btns">
+      <button class="btn-reset" onclick="confirmReset()">Reset all progress</button>
+      <button class="btn-ghost" onclick="inspectStorage()">Inspect saved data</button>
+    </div>
+    <pre id="storage-inspect" style="display:none; margin-top:12px; font-family:var(--mono); font-size:11px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:12px; overflow-x:auto; white-space:pre-wrap;"></pre>
+  </div>
+
+</div><!-- /page -->
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-title">Reset all progress?</div>
+    <div class="confirm-desc">This will clear all completed modules, quiz answers, and XP. This cannot be undone.</div>
+    <div class="confirm-btns">
+      <button class="btn-ghost" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-reset" onclick="doReset()">Yes, reset everything</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Course data ──
+  const PHASES = [
+    { id: 1, name: 'Setup & first steps', cls: 'ph1', numCls: 'num-ph1', modules: [
+      { n:1,  title:'Your dev environment',     time:'45 min',  badge:'b-setup', bl:'setup',   xp:50,  file:'module-01.html' },
+      { n:2,  title:'How computers think',       time:'50 min',  badge:'b-quiz',  bl:'quiz',    xp:60,  file:'module-02.html' },
+      { n:3,  title:'Working with data',         time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:60,  file:'module-03.html' },
+      { n:4,  title:'Your first real program',   time:'60 min',  badge:'b-proj',  bl:'project', xp:100, file:'module-04.html' },
+    ]},
+    { id: 2, name: 'Core Python', cls: 'ph2', numCls: 'num-ph2', modules: [
+      { n:5,  title:'Making decisions',          time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-05.html' },
+      { n:6,  title:'Loops and repetition',      time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-06.html' },
+      { n:7,  title:'Mini-game checkpoint',      time:'70 min',  badge:'b-game',  bl:'game',    xp:120, file:'module-07.html' },
+      { n:8,  title:'Lists and collections',     time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-08.html' },
+      { n:9,  title:'Functions',                 time:'65 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-09.html' },
+      { n:10, title:'User input & output',       time:'50 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-10.html' },
+      { n:11, title:'Text adventure game',       time:'90 min',  badge:'b-game',  bl:'game',    xp:150, file:'module-11.html' },
+    ]},
+    { id: 3, name: 'Intermediate skills', cls: 'ph3', numCls: 'num-ph3', modules: [
+      { n:12, title:'Working with files',        time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:80,  file:'module-12.html' },
+      { n:13, title:'Error handling',            time:'50 min',  badge:'b-quiz',  bl:'quiz',    xp:80,  file:'module-13.html' },
+      { n:14, title:'Modules and imports',       time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:80,  file:'module-14.html' },
+      { n:15, title:'Intro to OOP',              time:'70 min',  badge:'b-quiz',  bl:'quiz',    xp:90,  file:'module-15.html' },
+      { n:16, title:'OOP in practice',           time:'65 min',  badge:'b-quiz',  bl:'quiz',    xp:90,  file:'module-16.html' },
+      { n:17, title:'RPG combat game',           time:'2 hrs',   badge:'b-game',  bl:'game',    xp:200, file:'module-17.html' },
+    ]},
+    { id: 4, name: 'Building real things', cls: 'ph4', numCls: 'num-ph4', modules: [
+      { n:18, title:'Algorithms & problem solving', time:'65 min', badge:'b-quiz', bl:'quiz',   xp:100, file:'module-18.html' },
+      { n:19, title:'Data structures',           time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:100, file:'module-19.html' },
+      { n:20, title:'Intro to Git',              time:'55 min',  badge:'b-setup', bl:'setup',   xp:80,  file:'module-20.html' },
+      { n:21, title:'External libraries',        time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:100, file:'module-21.html' },
+      { n:22, title:'Capstone game project',     time:'3–4 hrs', badge:'b-game',  bl:'game',    xp:300, file:'module-22.html' },
+    ]},
+    { id: 5, name: 'Foundations complete', cls: 'ph5', numCls: 'num-ph5', modules: [
+      { n:23, title:'What you\'ve learned',      time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:100, file:'module-23.html' },
+      { n:24, title:'Where to go next',          time:'45 min',  badge:'b-road',  bl:'roadmap', xp:100, file:'module-24.html' },
+    ]},
+  ];
+
+  const ALL_MODULES = PHASES.flatMap(p => p.modules);
+
+  // ── Load progress ──
+  function loadProgress() {
+    try {
+      const hub = JSON.parse(localStorage.getItem('course') || '{}');
+      return new Set(hub.done || []);
+    } catch(e) { return new Set(); }
+  }
+
+  function isUnlocked(n, done) {
+    return n === 1 || done.has(n - 1);
+  }
+
+  function getNextModule(done) {
+    return ALL_MODULES.find(m => !done.has(m.n) && isUnlocked(m.n, done)) || ALL_MODULES[0];
+  }
+
+  function totalXP(done) {
+    return ALL_MODULES.filter(m => done.has(m.n)).reduce((s, m) => s + m.xp, 0);
+  }
+
+  // ── Check icon ──
+  function checkSVG() {
+    return `<span class="check"><svg viewBox="0 0 8 7" fill="none"><path d="M1 3.5L3 5.5L7 1.5" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+  }
+
+  function lockSVG() {
+    return `<svg class="lock" viewBox="0 0 11 13" fill="none"><rect x="1.5" y="5.5" width="8" height="6.5" rx="1.5" stroke="currentColor" stroke-width="1"/><path d="M3.5 5.5V4a2 2 0 014 0v1.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>`;
+  }
+
+  // ── Render ──
+  function render() {
+    const done = loadProgress();
+    const total = ALL_MODULES.length;
+    const doneCount = done.size;
+    const xp = totalXP(done);
+    const pct = Math.round(doneCount / total * 100);
+    const next = getNextModule(done);
+
+    // Stats
+    document.getElementById('stat-done').textContent = doneCount;
+    document.getElementById('stat-left').textContent = total - doneCount;
+    document.getElementById('stat-xp').textContent   = xp;
+    document.getElementById('stat-pct').textContent  = pct + '%';
+    document.getElementById('bar-label').textContent = doneCount + ' / ' + total + ' modules';
+    document.getElementById('overall-fill').style.width = pct + '%';
+    document.getElementById('xp-display').textContent   = xp + ' XP';
+
+    // Greeting
+    document.getElementById('greeting').textContent =
+      doneCount === 0 ? 'Welcome to Python Foundations' :
+      doneCount === total ? 'Course complete!' :
+      'Welcome back!';
+
+    // Continue card
+    const phaseOfNext = PHASES.find(p => p.modules.some(m => m.n === next.n));
+    document.getElementById('continue-title').textContent = 'Module ' + next.n + ' — ' + next.title;
+    document.getElementById('continue-meta').textContent  = 'Phase ' + phaseOfNext.id + ' · ' + next.bl + ' · ~' + next.time;
+    document.getElementById('continue-card').href = next.file;
+
+    // Streak (simple: 1 dot per completed module up to 7)
+    const streakCount = Math.min(doneCount, 7);
+    document.getElementById('streak-count').textContent = streakCount;
+    const dotsEl = document.getElementById('streak-dots');
+    dotsEl.innerHTML = '';
+    for (let i = 0; i < 7; i++) {
+      const d = document.createElement('div');
+      d.className = 'day-dot s-dot' + (i < streakCount ? ' on' : '');
+      dotsEl.appendChild(d);
+    }
+
+    // Phases
+    const container = document.getElementById('phases-container');
+    container.innerHTML = '';
+
+    PHASES.forEach(phase => {
+      const phaseDone = phase.modules.filter(m => done.has(m.n)).length;
+      const section = document.createElement('div');
+      section.className = 'phase';
+      section.innerHTML = `
+        <div class="phase-hdr">
+          <span class="phase-pill ${phase.cls}">Phase ${phase.id}</span>
+          <span class="phase-name">${phase.name}</span>
+          <span class="phase-count">${phaseDone}/${phase.modules.length}</span>
+        </div>
+        <div class="mod-grid" id="grid-${phase.id}"></div>
+      `;
+      container.appendChild(section);
+
+      const grid = section.querySelector('#grid-' + phase.id);
+      phase.modules.forEach(mod => {
+        const isDone     = done.has(mod.n);
+        const unlocked   = isUnlocked(mod.n, done);
+        const isNext     = mod.n === next.n && !isDone;
+
+        const card = document.createElement('a');
+        card.href = unlocked ? mod.file : '#';
+        card.className = 'mod-card' +
+          (isDone    ? ' completed' : '') +
+          (isNext    ? ' active'    : '') +
+          (!unlocked ? ' locked'    : ' clickable');
+
+        if (!unlocked) card.onclick = e => e.preventDefault();
+
+        card.innerHTML = `
+          <div class="mod-num ${phase.numCls}">
+            Module ${mod.n}
+            ${isDone ? checkSVG() : (!unlocked ? lockSVG() : '')}
+          </div>
+          <div class="mod-title">${mod.title}</div>
+          <div class="mod-footer">
+            <span class="mod-time">${mod.time}</span>
+            <span class="mod-badge ${mod.badge}">${mod.bl}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    });
+  }
+
+  // ── Reset ──
+  function confirmReset() {
+    document.getElementById('confirm-overlay').classList.add('show');
+  }
+  function closeConfirm() {
+    document.getElementById('confirm-overlay').classList.remove('show');
+  }
+  function doReset() {
+    // Clear all module keys + course hub key
+    ['course', 'm1','m2','m3','m4','m5','m6','m7','m8','m9','m10',
+     'm11','m12','m13','m14','m15','m16','m17','m18','m19','m20',
+     'm21','m22','m23','m24'].forEach(k => localStorage.removeItem(k));
+    closeConfirm();
+    render();
+  }
+
+  // ── Inspect storage ──
+  function inspectStorage() {
+    const el = document.getElementById('storage-inspect');
+    if (el.style.display !== 'none') { el.style.display = 'none'; return; }
+    const data = {};
+    ['course','m1','m2','m3','m4','m5','m6','m7','m8','m9','m10',
+     'm11','m12','m13','m14','m15','m16','m17','m18','m19','m20',
+     'm21','m22','m23','m24'].forEach(k => {
+      const v = localStorage.getItem(k);
+      if (v) data[k] = JSON.parse(v);
+    });
+    el.textContent = JSON.stringify(data, null, 2);
+    el.style.display = 'block';
+  }
+
+  // ── Close confirm on overlay click ──
+  document.getElementById('confirm-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeConfirm();
+  });
+
+  // ── Go ──
+  render();
+</script>
+
+</body>
+</html>
