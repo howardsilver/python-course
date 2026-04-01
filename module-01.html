@@ -576,7 +576,10 @@
   try {
     const saved = JSON.parse(localStorage.getItem('m1') || '{}');
     if (saved.steps) saved.steps.forEach(i => doneSteps.add(i));
-    if (saved.quiz)  Object.assign(doneQuiz, saved.quiz);
+    if (saved.quiz) {
+      // Normalize keys to integers — JSON always serializes them as strings
+      Object.entries(saved.quiz).forEach(([k, v]) => { doneQuiz[parseInt(k)] = v; });
+    }
   } catch(e) {}
 
   function save() {
@@ -593,20 +596,23 @@
     if (doneSteps.has(i)) el.classList.add('done');
   });
 
-  // ── Restore quiz visuals ──
-  Object.entries(doneQuiz).forEach(([qi, {correct, selected}]) => {
-    const card = document.getElementById('qc-' + qi);
+  // ── Restore quiz visuals — only for questions that have a saved answer ──
+  Object.entries(doneQuiz).forEach(([qi, val]) => {
+    const qiNum = parseInt(qi);
+    const { correct, selected } = val;
+    const card = document.getElementById('qc-' + qiNum);
     if (!card) return;
     const opts = card.querySelectorAll('.quiz-opt');
-    opts.forEach(b => {
+    // Only lock and style this card — leave unanswered cards fully interactive
+    opts.forEach((b, idx) => {
       b.disabled = true;
       const isCorrect = b.getAttribute('onclick').includes('true');
-      if (b === opts[selected]) b.classList.add(correct ? 'correct' : 'wrong');
+      if (idx === selected) b.classList.add(correct ? 'correct' : 'wrong');
       if (!correct && isCorrect) b.classList.add('correct');
     });
-    const fb = document.getElementById('qf-' + qi);
+    const fb = document.getElementById('qf-' + qiNum);
     if (fb) {
-      fb.textContent = correct ? feedbackOk[qi] : feedbackNo[qi];
+      fb.textContent = correct ? feedbackOk[qiNum] : feedbackNo[qiNum];
       fb.className   = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
     }
   });
@@ -646,7 +652,7 @@
   ];
 
   function answer(qi, btn, correct) {
-    if (doneQuiz[qi] !== undefined) return;
+    if (doneQuiz[parseInt(qi)] !== undefined) return;
     const card = document.getElementById('qc-' + qi);
     const opts = card.querySelectorAll('.quiz-opt');
     const selectedIdx = Array.from(opts).indexOf(btn);
@@ -658,7 +664,7 @@
     const fb = document.getElementById('qf-' + qi);
     fb.textContent = correct ? feedbackOk[qi] : feedbackNo[qi];
     fb.className   = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
-    doneQuiz[qi]   = { correct, selected: selectedIdx };
+    doneQuiz[parseInt(qi)]   = { correct, selected: selectedIdx };
     save();
     checkReward();
   }
