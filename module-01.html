@@ -572,74 +572,8 @@
   const doneSteps   = new Set();
   const doneQuiz    = {};
 
-  // ── Load saved state ──
-  try {
-    const saved = JSON.parse(localStorage.getItem('m1') || '{}');
-    if (saved.steps) saved.steps.forEach(i => doneSteps.add(i));
-    if (saved.quiz) {
-      // Normalize keys to integers — JSON always serializes them as strings
-      Object.entries(saved.quiz).forEach(([k, v]) => { doneQuiz[parseInt(k)] = v; });
-    }
-  } catch(e) {}
+  // ── All data declarations first ──
 
-  function save() {
-    try {
-      localStorage.setItem('m1', JSON.stringify({
-        steps: [...doneSteps],
-        quiz:  doneQuiz
-      }));
-    } catch(e) {}
-  }
-
-  // ── Restore step visuals ──
-  document.querySelectorAll('.step').forEach((el, i) => {
-    if (doneSteps.has(i)) el.classList.add('done');
-  });
-
-  // ── Restore quiz visuals — only for questions that have a saved answer ──
-  Object.entries(doneQuiz).forEach(([qi, val]) => {
-    const qiNum = parseInt(qi);
-    const { correct, selected } = val;
-    const card = document.getElementById('qc-' + qiNum);
-    if (!card) return;
-    const opts = card.querySelectorAll('.quiz-opt');
-    // Only lock and style this card — leave unanswered cards fully interactive
-    opts.forEach((b, idx) => {
-      b.disabled = true;
-      const isCorrect = b.getAttribute('onclick').includes('true');
-      if (idx === selected) b.classList.add(correct ? 'correct' : 'wrong');
-      if (!correct && isCorrect) b.classList.add('correct');
-    });
-    const fb = document.getElementById('qf-' + qiNum);
-    if (fb) {
-      fb.textContent = correct ? feedbackOk[qiNum] : feedbackNo[qiNum];
-      fb.className   = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
-    }
-  });
-
-  updateProgress();
-  checkReward();
-
-  // ── Toggle step ──
-  function toggleStep(i) {
-    if (doneSteps.has(i)) doneSteps.delete(i);
-    else doneSteps.add(i);
-    document.querySelectorAll('.step')[i].classList.toggle('done', doneSteps.has(i));
-    updateProgress();
-    save();
-    checkReward();
-  }
-
-  // ── Progress bar ──
-  function updateProgress() {
-    const n   = doneSteps.size;
-    const pct = Math.round(n / TOTAL_STEPS * 100);
-    document.getElementById('prog-label').textContent = n + ' of ' + TOTAL_STEPS + ' steps complete';
-    document.getElementById('prog-pct').textContent   = pct + '%';
-    document.getElementById('prog-fill').style.width  = pct + '%';
-  }
-
-  // ── Quiz answers ──
   const feedbackOk = [
     "Correct! Without PATH, the terminal searches for Python and can't find it — so all python commands fail with a confusing error.",
     "Correct! print() is Python's way of outputting text. Whatever you put in the parentheses gets displayed in the terminal.",
@@ -651,8 +585,36 @@
     "Not quite. Python files use .py — for example, hello.py. The extension tells VS Code how to treat the file."
   ];
 
+  // ── Functions ──
+
+  function save() {
+    try {
+      localStorage.setItem('m1', JSON.stringify({
+        steps: [...doneSteps],
+        quiz:  doneQuiz
+      }));
+    } catch(e) {}
+  }
+
+  function updateProgress() {
+    const n   = doneSteps.size;
+    const pct = Math.round(n / TOTAL_STEPS * 100);
+    document.getElementById('prog-label').textContent = n + ' of ' + TOTAL_STEPS + ' steps complete';
+    document.getElementById('prog-pct').textContent   = pct + '%';
+    document.getElementById('prog-fill').style.width  = pct + '%';
+  }
+
+  function toggleStep(i) {
+    if (doneSteps.has(i)) doneSteps.delete(i);
+    else doneSteps.add(i);
+    document.querySelectorAll('.step')[i].classList.toggle('done', doneSteps.has(i));
+    updateProgress();
+    save();
+    checkReward();
+  }
+
   function answer(qi, btn, correct) {
-    if (doneQuiz[parseInt(qi)] !== undefined) return;
+    if (doneQuiz[qi] !== undefined) return;
     const card = document.getElementById('qc-' + qi);
     const opts = card.querySelectorAll('.quiz-opt');
     const selectedIdx = Array.from(opts).indexOf(btn);
@@ -664,19 +626,17 @@
     const fb = document.getElementById('qf-' + qi);
     fb.textContent = correct ? feedbackOk[qi] : feedbackNo[qi];
     fb.className   = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
-    doneQuiz[parseInt(qi)]   = { correct, selected: selectedIdx };
+    doneQuiz[qi] = { correct, selected: selectedIdx };
     save();
     checkReward();
   }
 
-  // ── Reward ──
   function checkReward() {
     const allSteps = doneSteps.size === TOTAL_STEPS;
     const allQuiz  = Object.keys(doneQuiz).length === TOTAL_QUIZ;
     const reward   = document.getElementById('reward');
     if (allSteps && allQuiz) {
       reward.classList.add('show');
-      // mark module done in course hub state
       try {
         const hub = JSON.parse(localStorage.getItem('course') || '{}');
         hub.done  = hub.done || [];
@@ -686,13 +646,11 @@
     }
   }
 
-  // ── Hints toggle ──
   function showHint(i) {
     const box = document.getElementById('hint-' + i);
     box.style.display = box.style.display === 'none' ? 'block' : 'none';
   }
 
-  // ── Copy code ──
   function copyCode(text, btn) {
     navigator.clipboard.writeText(text).then(() => {
       btn.textContent = 'Copied!';
@@ -704,11 +662,49 @@
     });
   }
 
-  // ── Bonus challenge ──
   function showBonusChallenge() {
     const el = document.getElementById('bonus');
     el.style.display = el.style.display === 'none' ? 'block' : 'none';
   }
+
+  // ── Init — runs after all functions and data are declared ──
+  function init() {
+    // Load saved state
+    try {
+      const saved = JSON.parse(localStorage.getItem('m1') || '{}');
+      if (saved.steps) saved.steps.forEach(i => doneSteps.add(i));
+      if (saved.quiz)  Object.assign(doneQuiz, saved.quiz);
+    } catch(e) {}
+
+    // Restore step visuals
+    document.querySelectorAll('.step').forEach((el, i) => {
+      if (doneSteps.has(i)) el.classList.add('done');
+    });
+
+    // Restore quiz visuals — only touch cards that have a saved answer
+    Object.entries(doneQuiz).forEach(([qi, val]) => {
+      const { correct, selected } = val;
+      const card = document.getElementById('qc-' + qi);
+      if (!card) return;
+      const opts = card.querySelectorAll('.quiz-opt');
+      opts.forEach((b, idx) => {
+        b.disabled = true;
+        const isCorrect = b.getAttribute('onclick').includes('true');
+        if (idx === selected) b.classList.add(correct ? 'correct' : 'wrong');
+        if (!correct && isCorrect) b.classList.add('correct');
+      });
+      const fb = document.getElementById('qf-' + qi);
+      if (fb) {
+        fb.textContent = correct ? feedbackOk[qi] : feedbackNo[qi];
+        fb.className   = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
+      }
+    });
+
+    updateProgress();
+    checkReward();
+  }
+
+  init();
 </script>
 
 </body>
