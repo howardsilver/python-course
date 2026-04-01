@@ -590,8 +590,9 @@
   function save() {
     try {
       localStorage.setItem('m1', JSON.stringify({
-        steps: [...doneSteps],
-        quiz:  doneQuiz
+        steps:      [...doneSteps],
+        totalSteps: TOTAL_STEPS,
+        quiz:       doneQuiz
       }));
     } catch(e) {}
   }

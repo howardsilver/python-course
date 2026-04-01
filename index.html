@@ -221,6 +221,13 @@
   .b-proj   { background: var(--purple-bg); color: var(--purple-lt); }
   .b-road   { background: rgba(248,113,113,0.1); color: var(--coral); }
 
+  .mod-pct {
+    font-size: 11px; font-weight: 500; margin-top: 7px;
+  }
+  .mod-pct.in-progress { color: var(--purple-lt); }
+  .mod-pct.complete    { color: var(--teal); }
+  .mod-pct.reviewing   { color: var(--blue); }
+
   /* ── DIVIDER ── */
   hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 
@@ -428,6 +435,25 @@
     } catch(e) { return new Set(); }
   }
 
+  // Returns { stepsComplete, totalSteps } for a module, or null if never opened
+  function moduleStepData(n) {
+    try {
+      const raw = localStorage.getItem('m' + n);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      const stepsComplete = (data.steps || []).length;
+      const totalSteps    = data.totalSteps || 7;
+      return { stepsComplete, totalSteps };
+    } catch(e) { return null; }
+  }
+
+  // Returns 0-100 integer, or null if never opened
+  function modulePct(n) {
+    const d = moduleStepData(n);
+    if (!d) return null;
+    return Math.round(d.stepsComplete / d.totalSteps * 100);
+  }
+
   function isUnlocked(n, done) {
     return n === 1 || done.has(n - 1);
   }
@@ -438,6 +464,14 @@
 
   function totalXP(done) {
     return ALL_MODULES.filter(m => done.has(m.n)).reduce((s, m) => s + m.xp, 0);
+  }
+
+  // Continue card label logic
+  function continueLabel(mod, done) {
+    if (done.has(mod.n)) return 'Reviewing';
+    const pct = modulePct(mod.n);
+    if (pct === null || pct === 0) return 'Start learning';
+    return 'Continue learning';
   }
 
   // ── Check icon ──
@@ -475,8 +509,13 @@
 
     // Continue card
     const phaseOfNext = PHASES.find(p => p.modules.some(m => m.n === next.n));
+    const cardLabel = continueLabel(next, done);
+    const nextPct   = modulePct(next.n);
+    const pctSuffix = (nextPct !== null && nextPct > 0 && !done.has(next.n))
+      ? ' · ' + nextPct + '% done' : '';
+    document.getElementById('continue-label').textContent = cardLabel;
     document.getElementById('continue-title').textContent = 'Module ' + next.n + ' — ' + next.title;
-    document.getElementById('continue-meta').textContent  = 'Phase ' + phaseOfNext.id + ' · ' + next.bl + ' · ~' + next.time;
+    document.getElementById('continue-meta').textContent  = 'Phase ' + phaseOfNext.id + ' · ' + next.bl + ' · ~' + next.time + pctSuffix;
     document.getElementById('continue-card').href = next.file;
 
     // Streak (simple: 1 dot per completed module up to 7)
@@ -523,6 +562,14 @@
 
         if (!unlocked) card.onclick = e => e.preventDefault();
 
+        const pct = modulePct(mod.n);
+        const pctLine = (() => {
+          if (isDone)          return `<div class="mod-pct complete">100% complete</div>`;
+          if (pct === null)    return '';
+          if (pct === 0)       return '';
+          return `<div class="mod-pct in-progress">${pct}% complete</div>`;
+        })();
+
         card.innerHTML = `
           <div class="mod-num ${phase.numCls}">
             Module ${mod.n}
@@ -533,6 +580,7 @@
             <span class="mod-time">${mod.time}</span>
             <span class="mod-badge ${mod.badge}">${mod.bl}</span>
           </div>
+          ${pctLine}
         `;
         grid.appendChild(card);
       });
