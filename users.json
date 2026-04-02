@@ -1,5 +1,5 @@
 [
-  { "name": "Alex",  "avatar": "A", "pin": "1234" },
-  { "name": "Dad",   "avatar": "D", "pin": "5678" },
-  { "name": "Admin", "avatar": "X", "pin": "9999", "admin": true }
+  { "name": "Stephen",  "avatar": "S", "pin": "1234" },
+  { "name": "Melanie",  "avatar": "M", "pin": "1768" },
+  { "name": "Admin", "avatar": "X", "pin": "6119", "admin": true }
 ]
