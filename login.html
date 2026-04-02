@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in · Python Foundations</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+  :root {
+    --bg:#0f1117;--bg2:#181c27;--bg3:#1e2333;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+    --purple:#7c6ff7;--purple-lt:#a99df9;--purple-bg:rgba(124,111,247,0.12);
+    --teal:#34d399;--amber:#fbbf24;--red:#f87171;
+    --text:#e2e4ed;--text2:#8b8fa8;--text3:#555974;
+    --sans:'DM Sans',sans-serif;--radius:10px;--radius-lg:16px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:24px;}
+  .logo{font-size:13px;font-weight:600;color:#fff;margin-bottom:32px;}
+  .logo span{color:var(--purple-lt);}
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:28px;width:100%;max-width:420px;}
+  .card-title{font-size:18px;font-weight:600;color:#fff;margin-bottom:6px;}
+  .card-sub{font-size:13px;color:var(--text2);margin-bottom:24px;}
+  .loading{font-size:13px;color:var(--text3);text-align:center;padding:20px 0;}
+  .user-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;}
+  .user-btn{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:14px 10px;cursor:pointer;transition:border-color .15s,background .15s;
+    display:flex;flex-direction:column;align-items:center;gap:8px;font-family:var(--sans);}
+  .user-btn:hover{border-color:var(--border2);background:#232840;}
+  .user-btn.selected{border-color:var(--purple);border-width:1.5px;background:var(--purple-bg);}
+  .avatar{width:40px;height:40px;border-radius:50%;background:var(--purple-bg);
+    border:1px solid rgba(124,111,247,0.3);display:flex;align-items:center;
+    justify-content:center;font-size:15px;font-weight:600;color:var(--purple-lt);}
+  .user-name{font-size:12px;font-weight:500;color:var(--text);text-align:center;}
+  .pin-section{display:none;margin-top:20px;}
+  .pin-section.show{display:block;}
+  .pin-who{font-size:13px;color:var(--text2);margin-bottom:12px;}
+  .pin-who strong{color:#fff;}
+  .pin-dots{display:flex;gap:10px;justify-content:center;margin-bottom:16px;}
+  .pin-dot{width:14px;height:14px;border-radius:50%;background:var(--bg3);
+    border:1px solid var(--border2);transition:background .15s,border-color .15s;}
+  .pin-dot.filled{background:var(--purple);border-color:var(--purple);}
+  .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .pin-key{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+    padding:14px;font-size:16px;font-weight:500;color:var(--text);cursor:pointer;
+    font-family:var(--sans);transition:background .1s;text-align:center;}
+  .pin-key:hover{background:#232840;border-color:var(--border2);}
+  .pin-key:active{background:var(--purple-bg);}
+  .pin-key.sm{font-size:13px;color:var(--text2);}
+  .pin-error{font-size:12px;color:var(--red);text-align:center;margin-top:10px;height:16px;}
+  .btn-go{width:100%;margin-top:16px;padding:12px;background:var(--purple);border:none;
+    border-radius:var(--radius);font-family:var(--sans);font-size:14px;font-weight:500;
+    color:#fff;cursor:pointer;transition:background .15s;display:none;}
+  .btn-go.show{display:block;}
+  .btn-go:hover{background:#6c5fe6;}
+  .btn-back{background:none;border:none;font-family:var(--sans);font-size:12px;
+    color:var(--text3);cursor:pointer;margin-top:12px;width:100%;text-align:center;
+    transition:color .15s;}
+  .btn-back:hover{color:var(--text2);}
+  .shake{animation:shake .35s ease;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+</style>
+</head>
+<body>
+<div class="logo">Python <span>Foundations</span></div>
+<div class="card">
+  <div class="card-title">Who's learning today?</div>
+  <div class="card-sub" id="card-sub">Select your name to continue.</div>
+  <div id="grid-wrap"><div class="loading">Loading...</div></div>
+  <div class="pin-section" id="pin-section">
+    <div class="pin-who">Enter your PIN for <strong id="pin-name"></strong></div>
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="pin-pad">
+      <button class="pin-key" onclick="pp('1')">1</button>
+      <button class="pin-key" onclick="pp('2')">2</button>
+      <button class="pin-key" onclick="pp('3')">3</button>
+      <button class="pin-key" onclick="pp('4')">4</button>
+      <button class="pin-key" onclick="pp('5')">5</button>
+      <button class="pin-key" onclick="pp('6')">6</button>
+      <button class="pin-key" onclick="pp('7')">7</button>
+      <button class="pin-key" onclick="pp('8')">8</button>
+      <button class="pin-key" onclick="pp('9')">9</button>
+      <button class="pin-key sm" onclick="pc()">Clear</button>
+      <button class="pin-key" onclick="pp('0')">0</button>
+      <button class="pin-key sm" onclick="pb()">⌫</button>
+    </div>
+    <div class="pin-error" id="pin-error"></div>
+    <button class="btn-go" id="btn-go" onclick="tryLogin()">Enter course →</button>
+    <button class="btn-back" onclick="goBack()">← Choose a different user</button>
+  </div>
+</div>
+<script>
+  const SK = 'pf_user';
+  if (localStorage.getItem(SK)) location.replace('index.html');
+
+  let USERS = [], sel = null, pin = '';
+
+  fetch('users.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(data => { USERS = data.filter(u => !u.admin); buildGrid(); })
+    .catch(() => {
+      document.getElementById('grid-wrap').innerHTML =
+        '<div class="loading" style="color:#f87171">Could not load users.json</div>';
+    });
+
+  function buildGrid() {
+    const wrap = document.getElementById('grid-wrap');
+    const grid = document.createElement('div');
+    grid.className = 'user-grid';
+    USERS.forEach(u => {
+      const b = document.createElement('button');
+      b.className = 'user-btn';
+      b.innerHTML = `<div class="avatar">${u.avatar}</div><div class="user-name">${u.name}</div>`;
+      b.onclick = () => selectUser(u, b);
+      grid.appendChild(b);
+    });
+    wrap.innerHTML = '';
+    wrap.appendChild(grid);
+  }
+
+  function selectUser(u, btn) {
+    sel = u; pin = '';
+    document.querySelectorAll('.user-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('pin-name').textContent = u.name;
+    document.getElementById('pin-section').classList.add('show');
+    document.getElementById('card-sub').textContent = 'Enter your 4-digit PIN.';
+    document.getElementById('pin-error').textContent = '';
+    document.getElementById('btn-go').classList.remove('show');
+    updateDots();
+  }
+
+  function pp(d) { if (pin.length>=4) return; pin+=d; updateDots(); if(pin.length===4) document.getElementById('btn-go').classList.add('show'); }
+  function pb()  { pin=pin.slice(0,-1); updateDots(); document.getElementById('btn-go').classList.remove('show'); }
+  function pc()  { pin=''; updateDots(); document.getElementById('btn-go').classList.remove('show'); }
+
+  function updateDots() {
+    for (let i=0;i<4;i++) document.getElementById('d'+i).classList.toggle('filled', i<pin.length);
+  }
+
+  function tryLogin() {
+    if (!sel) return;
+    if (pin === sel.pin) {
+      localStorage.setItem(SK, sel.name);
+      location.replace('index.html');
+    } else {
+      pin=''; updateDots();
+      document.getElementById('btn-go').classList.remove('show');
+      document.getElementById('pin-error').textContent = 'Incorrect PIN — try again.';
+      document.getElementById('pin-dots').classList.add('shake');
+      setTimeout(() => document.getElementById('pin-dots').classList.remove('shake'), 400);
+    }
+  }
+
+  function goBack() {
+    sel=null; pin='';
+    document.querySelectorAll('.user-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('pin-section').classList.remove('show');
+    document.getElementById('card-sub').textContent = 'Select your name to continue.';
+    document.getElementById('pin-error').textContent = '';
+    document.getElementById('btn-go').classList.remove('show');
+    updateDots();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('pin-section').classList.contains('show')) return;
+    if (e.key==='Enter' && pin.length===4) tryLogin();
+    else if (e.key==='Backspace') pb();
+    else if (e.key>='0' && e.key<='9') pp(e.key);
+  });
+</script>
+</body>
+</html>

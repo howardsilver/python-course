@@ -73,6 +73,19 @@
     border-radius: 20px; padding: 4px 12px;
     font-size: 12px; font-weight: 500; color: var(--purple-lt);
   }
+  .user-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 20px; padding: 4px 6px 4px 12px;
+    font-size: 12px; color: var(--text2);
+  }
+  .logout-btn {
+    font-family: var(--sans); font-size: 11px; font-weight: 500;
+    background: var(--bg2); border: 1px solid var(--border2);
+    border-radius: 20px; padding: 3px 10px; color: var(--text3);
+    cursor: pointer; transition: color .15s, border-color .15s;
+  }
+  .logout-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
 
   /* ── LAYOUT ── */
   .page { max-width: 860px; margin: 0 auto; padding: 36px 28px 80px; }
@@ -297,6 +310,10 @@
       <span id="streak-count">0</span> day streak
     </div>
     <div class="xp-pill" id="xp-display">0 XP</div>
+    <div class="user-pill" id="user-pill">
+      <span id="user-name-display"></span>
+      <button class="logout-btn" onclick="logout()">Sign out</button>
+    </div>
   </div>
 </nav>
 
@@ -387,6 +404,21 @@
 </div>
 
 <script>
+  // ── Auth ──
+  const STORAGE_KEY = 'pf_user';
+  const currentUser = localStorage.getItem(STORAGE_KEY);
+  if (!currentUser) window.location.replace('login.html');
+
+  // Namespace helper — all keys prefixed with username
+  function key(k) { return currentUser.toLowerCase() + '_' + k; }
+
+  document.getElementById('user-name-display').textContent = currentUser;
+
+  function logout() {
+    localStorage.removeItem(STORAGE_KEY);
+    window.location.replace('login.html');
+  }
+
   // ── Course data ──
   const PHASES = [
     { id: 1, name: 'Setup & first steps', cls: 'ph1', numCls: 'num-ph1', modules: [
@@ -430,7 +462,7 @@
   // ── Load progress ──
   function loadProgress() {
     try {
-      const hub = JSON.parse(localStorage.getItem('course') || '{}');
+      const hub = JSON.parse(localStorage.getItem(key('course')) || '{}');
       return new Set(hub.done || []);
     } catch(e) { return new Set(); }
   }
@@ -438,7 +470,7 @@
   // Returns { stepsComplete, totalSteps } for a module, or null if never opened
   function moduleStepData(n) {
     try {
-      const raw = localStorage.getItem('m' + n);
+      const raw = localStorage.getItem(key('m' + n));
       if (!raw) return null;
       const data = JSON.parse(raw);
       const stepsComplete = (data.steps || []).length;
@@ -595,10 +627,10 @@
     document.getElementById('confirm-overlay').classList.remove('show');
   }
   function doReset() {
-    // Clear all module keys + course hub key
-    ['course', 'm1','m2','m3','m4','m5','m6','m7','m8','m9','m10',
+    // Clear all namespaced module keys + course hub key for current user
+    ['course','m1','m2','m3','m4','m5','m6','m7','m8','m9','m10',
      'm11','m12','m13','m14','m15','m16','m17','m18','m19','m20',
-     'm21','m22','m23','m24'].forEach(k => localStorage.removeItem(k));
+     'm21','m22','m23','m24'].forEach(k => localStorage.removeItem(key(k)));
     closeConfirm();
     render();
   }
@@ -611,7 +643,7 @@
     ['course','m1','m2','m3','m4','m5','m6','m7','m8','m9','m10',
      'm11','m12','m13','m14','m15','m16','m17','m18','m19','m20',
      'm21','m22','m23','m24'].forEach(k => {
-      const v = localStorage.getItem(k);
+      const v = localStorage.getItem(key(k));
       if (v) data[k] = JSON.parse(v);
     });
     el.textContent = JSON.stringify(data, null, 2);

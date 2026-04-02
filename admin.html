@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Python Foundations</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+  :root {
+    --bg:#0f1117;--bg2:#181c27;--bg3:#1e2333;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+    --purple:#7c6ff7;--purple-lt:#a99df9;--purple-bg:rgba(124,111,247,0.12);
+    --teal:#34d399;--teal-bg:rgba(52,211,153,0.08);
+    --amber:#fbbf24;--amber-bg:rgba(251,191,36,0.08);
+    --red:#f87171;--red-bg:rgba(248,113,113,0.08);
+    --blue:#60a5fa;--blue-bg:rgba(96,165,250,0.08);
+    --text:#e2e4ed;--text2:#8b8fa8;--text3:#555974;
+    --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+    --radius:8px;--radius-lg:14px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+
+  /* ── GATE ── */
+  #gate{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+  .gate-logo{font-size:13px;font-weight:600;color:#fff;margin-bottom:8px;}
+  .gate-logo span{color:var(--purple-lt);}
+  .gate-sub{font-size:12px;color:var(--text3);margin-bottom:28px;}
+  .gate-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:24px;width:100%;max-width:320px;text-align:center;}
+  .gate-title{font-size:16px;font-weight:600;color:#fff;margin-bottom:4px;}
+  .gate-hint{font-size:12px;color:var(--text3);margin-bottom:20px;}
+  .pin-dots{display:flex;gap:10px;justify-content:center;margin-bottom:16px;}
+  .pin-dot{width:13px;height:13px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);transition:background .15s;}
+  .pin-dot.filled{background:var(--purple);border-color:var(--purple);}
+  .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+  .pin-key{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+    padding:12px;font-size:15px;font-weight:500;color:var(--text);cursor:pointer;
+    font-family:var(--sans);transition:background .1s;text-align:center;}
+  .pin-key:hover{background:#232840;border-color:var(--border2);}
+  .pin-key.sm{font-size:12px;color:var(--text2);}
+  .pin-error{font-size:12px;color:var(--red);margin-top:10px;height:16px;}
+  .btn-enter{width:100%;margin-top:14px;padding:11px;background:var(--purple);border:none;
+    border-radius:var(--radius);font-family:var(--sans);font-size:13px;font-weight:500;
+    color:#fff;cursor:pointer;display:none;}
+  .btn-enter.show{display:block;}
+  .btn-enter:hover{background:#6c5fe6;}
+  .shake{animation:shake .35s ease;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+  /* ── ADMIN LAYOUT ── */
+  #app{display:none;}
+  nav{display:flex;align-items:center;gap:14px;padding:13px 28px;border-bottom:1px solid var(--border);}
+  .nav-logo{font-size:13px;font-weight:600;color:#fff;}
+  .nav-logo span{color:var(--purple-lt);}
+  .nav-badge{font-size:11px;font-weight:500;background:var(--red-bg);color:var(--red);
+    border:1px solid rgba(248,113,113,0.2);border-radius:20px;padding:2px 10px;}
+  .nav-right{margin-left:auto;display:flex;gap:10px;align-items:center;}
+  .nav-signout{font-family:var(--sans);font-size:12px;background:var(--bg3);border:1px solid var(--border2);
+    border-radius:20px;padding:3px 12px;color:var(--text3);cursor:pointer;transition:color .15s;}
+  .nav-signout:hover{color:var(--text);}
+
+  .page{max-width:860px;margin:0 auto;padding:32px 28px 80px;}
+
+  /* ── SECTION ── */
+  .section{margin-bottom:40px;}
+  .section-hdr{display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+  .section-title{font-size:15px;font-weight:600;color:#fff;}
+  .section-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+
+  /* ── PROGRESS TABLE ── */
+  .prog-table{width:100%;border-collapse:collapse;}
+  .prog-table th{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;
+    letter-spacing:.06em;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+  .prog-table td{padding:12px 12px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);vertical-align:middle;}
+  .prog-table tr:last-child td{border-bottom:none;}
+  .prog-table tr:hover td{background:rgba(255,255,255,0.02);}
+  .user-cell{display:flex;align-items:center;gap:10px;}
+  .av{width:30px;height:30px;border-radius:50%;background:var(--purple-bg);
+    border:1px solid rgba(124,111,247,0.25);display:flex;align-items:center;
+    justify-content:center;font-size:12px;font-weight:600;color:var(--purple-lt);flex-shrink:0;}
+  .u-name{font-weight:500;color:var(--text);}
+  .pct-bar-wrap{display:flex;align-items:center;gap:8px;}
+  .pct-bar-bg{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;min-width:60px;}
+  .pct-bar-fill{height:100%;background:var(--purple);border-radius:3px;}
+  .pct-val{font-size:12px;color:var(--text2);min-width:32px;text-align:right;}
+  .mod-label{font-size:12px;}
+  .xp-val{font-size:12px;color:var(--amber);}
+  .btn-reset-user{font-family:var(--sans);font-size:11px;background:var(--red-bg);
+    border:1px solid rgba(248,113,113,0.2);border-radius:6px;padding:4px 10px;
+    color:var(--red);cursor:pointer;white-space:nowrap;transition:background .15s;}
+  .btn-reset-user:hover{background:rgba(248,113,113,0.15);}
+  .no-data{font-size:12px;color:var(--text3);font-style:italic;}
+
+  /* ── USER MANAGEMENT ── */
+  .user-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+  .user-row{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:12px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .user-row input{font-family:var(--sans);font-size:13px;background:var(--bg3);
+    border:1px solid var(--border2);border-radius:var(--radius);padding:6px 10px;
+    color:var(--text);outline:none;transition:border-color .15s;}
+  .user-row input:focus{border-color:var(--purple);}
+  .inp-name{width:110px;}
+  .inp-avatar{width:60px;}
+  .inp-pin{width:80px;font-family:var(--mono);}
+  .inp-label{font-size:11px;color:var(--text3);display:flex;flex-direction:column;gap:3px;}
+  .row-actions{margin-left:auto;display:flex;gap:6px;}
+  .btn-del{font-family:var(--sans);font-size:11px;background:var(--red-bg);
+    border:1px solid rgba(248,113,113,0.2);border-radius:6px;padding:5px 10px;
+    color:var(--red);cursor:pointer;transition:background .15s;}
+  .btn-del:hover{background:rgba(248,113,113,0.18);}
+
+  .add-form{background:var(--bg2);border:1px dashed var(--border2);border-radius:var(--radius-lg);
+    padding:14px;display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;}
+  .add-form input{font-family:var(--sans);font-size:13px;background:var(--bg3);
+    border:1px solid var(--border2);border-radius:var(--radius);padding:7px 10px;
+    color:var(--text);outline:none;transition:border-color .15s;}
+  .add-form input:focus{border-color:var(--purple);}
+  .add-form .inp-name{width:120px;}
+  .add-form .inp-avatar{width:70px;}
+  .add-form .inp-pin{width:90px;font-family:var(--mono);}
+  .btn-add{font-family:var(--sans);font-size:13px;font-weight:500;
+    background:var(--purple);border:none;border-radius:var(--radius);
+    padding:7px 16px;color:#fff;cursor:pointer;transition:background .15s;white-space:nowrap;}
+  .btn-add:hover{background:#6c5fe6;}
+  .form-err{font-size:12px;color:var(--red);margin-top:6px;width:100%;}
+
+  .download-wrap{margin-top:14px;display:none;align-items:center;gap:10px;}
+  .download-wrap.show{display:flex;}
+  .btn-download{font-family:var(--sans);font-size:13px;font-weight:500;
+    background:var(--teal-bg);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius);
+    padding:8px 18px;color:var(--teal);cursor:pointer;transition:background .15s;}
+  .btn-download:hover{background:rgba(52,211,153,0.15);}
+  .download-note{font-size:12px;color:var(--text3);line-height:1.5;}
+
+  /* ── RESET TOOLS ── */
+  .reset-all-wrap{background:var(--red-bg);border:1px solid rgba(248,113,113,0.2);
+    border-radius:var(--radius-lg);padding:14px 18px;display:flex;
+    align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .reset-all-text{font-size:13px;color:var(--text2);line-height:1.5;}
+  .btn-reset-all{font-family:var(--sans);font-size:13px;font-weight:500;
+    background:var(--red);border:none;border-radius:var(--radius);
+    padding:8px 18px;color:#fff;cursor:pointer;white-space:nowrap;transition:background .15s;}
+  .btn-reset-all:hover{background:#e05555;}
+
+  /* ── CONFIRM OVERLAY ── */
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);
+    z-index:100;align-items:center;justify-content:center;}
+  .overlay.show{display:flex;}
+  .confirm-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);
+    padding:24px 28px;max-width:340px;width:90%;}
+  .confirm-title{font-size:15px;font-weight:600;color:#fff;margin-bottom:8px;}
+  .confirm-desc{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5;}
+  .confirm-btns{display:flex;gap:8px;justify-content:flex-end;}
+  .btn-cancel{font-family:var(--sans);font-size:13px;background:var(--bg3);
+    border:1px solid var(--border2);border-radius:var(--radius);padding:7px 14px;
+    color:var(--text2);cursor:pointer;}
+  .btn-cancel:hover{color:var(--text);}
+  .btn-confirm-red{font-family:var(--sans);font-size:13px;font-weight:500;
+    background:var(--red);border:none;border-radius:var(--radius);
+    padding:7px 14px;color:#fff;cursor:pointer;}
+
+  /* ── TOAST ── */
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);
+    padding:10px 20px;font-size:13px;color:var(--text);opacity:0;
+    transition:opacity .3s,transform .3s;pointer-events:none;z-index:200;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media(max-width:520px){
+    .page{padding:20px 14px 60px;}
+    nav{padding:12px 14px;}
+    .prog-table th:nth-child(3),.prog-table td:nth-child(3){display:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ── PIN GATE ── -->
+<div id="gate">
+  <div class="gate-logo">Python <span>Foundations</span></div>
+  <div class="gate-sub">Administration</div>
+  <div class="gate-card">
+    <div class="gate-title">Admin access</div>
+    <div class="gate-hint">Enter the admin PIN to continue.</div>
+    <div class="pin-dots" id="g-dots">
+      <div class="pin-dot" id="g0"></div><div class="pin-dot" id="g1"></div>
+      <div class="pin-dot" id="g2"></div><div class="pin-dot" id="g3"></div>
+    </div>
+    <div class="pin-pad">
+      <button class="pin-key" onclick="gp('1')">1</button>
+      <button class="pin-key" onclick="gp('2')">2</button>
+      <button class="pin-key" onclick="gp('3')">3</button>
+      <button class="pin-key" onclick="gp('4')">4</button>
+      <button class="pin-key" onclick="gp('5')">5</button>
+      <button class="pin-key" onclick="gp('6')">6</button>
+      <button class="pin-key" onclick="gp('7')">7</button>
+      <button class="pin-key" onclick="gp('8')">8</button>
+      <button class="pin-key" onclick="gp('9')">9</button>
+      <button class="pin-key sm" onclick="gc()">Clear</button>
+      <button class="pin-key" onclick="gp('0')">0</button>
+      <button class="pin-key sm" onclick="gb()">⌫</button>
+    </div>
+    <div class="pin-error" id="gate-err"></div>
+    <button class="btn-enter" id="btn-enter" onclick="tryGate()">Enter admin →</button>
+  </div>
+</div>
+
+<!-- ── ADMIN APP ── -->
+<div id="app">
+  <nav>
+    <div class="nav-logo">Python <span>Foundations</span></div>
+    <span class="nav-badge">Admin</span>
+    <div class="nav-right">
+      <button class="nav-signout" onclick="location.replace('index.html')">← Back to course</button>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <!-- SECTION 1: USER PROGRESS -->
+    <div class="section">
+      <div class="section-hdr">
+        <div>
+          <div class="section-title">User progress</div>
+          <div class="section-sub">Live data from this browser's localStorage.</div>
+        </div>
+        <button class="nav-signout" onclick="renderProgress()">Refresh</button>
+      </div>
+      <table class="prog-table" id="prog-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Progress</th>
+            <th>Current module</th>
+            <th>XP</th>
+            <th>Reset</th>
+          </tr>
+        </thead>
+        <tbody id="prog-body"></tbody>
+      </table>
+    </div>
+
+    <!-- SECTION 2: USER MANAGEMENT -->
+    <div class="section">
+      <div class="section-hdr">
+        <div>
+          <div class="section-title">User management</div>
+          <div class="section-sub">Edit users below, then download the updated users.json and push it to GitHub.</div>
+        </div>
+      </div>
+
+      <div class="user-rows" id="user-rows"></div>
+
+      <div class="add-form" id="add-form">
+        <label class="inp-label">Name
+          <input class="inp-name" id="new-name" type="text" placeholder="e.g. Sarah" maxlength="20">
+        </label>
+        <label class="inp-label">Avatar letter
+          <input class="inp-avatar" id="new-avatar" type="text" placeholder="e.g. S" maxlength="2">
+        </label>
+        <label class="inp-label">4-digit PIN
+          <input class="inp-pin" id="new-pin" type="text" placeholder="e.g. 4321" maxlength="4" inputmode="numeric">
+        </label>
+        <button class="btn-add" onclick="addUser()">+ Add user</button>
+        <div class="form-err" id="add-err"></div>
+      </div>
+
+      <div class="download-wrap" id="download-wrap">
+        <button class="btn-download" onclick="downloadUsers()">Download updated users.json</button>
+        <div class="download-note">Save this file, then drag it into your GitHub repo to replace the old one.</div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: RESET TOOLS -->
+    <div class="section">
+      <div class="section-hdr">
+        <div>
+          <div class="section-title">Reset tools</div>
+          <div class="section-sub">Clears progress data from this browser's localStorage. Cannot be undone.</div>
+        </div>
+      </div>
+      <div class="reset-all-wrap">
+        <div class="reset-all-text">
+          <strong style="color:#fff">Reset all users</strong><br>
+          Wipes every user's module progress, quiz answers, and XP.
+        </div>
+        <button class="btn-reset-all" onclick="confirmAction('resetAll', null)">Reset all users</button>
+      </div>
+    </div>
+
+  </div><!-- /page -->
+</div><!-- /app -->
+
+<!-- CONFIRM OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="confirm-box">
+    <div class="confirm-title" id="c-title">Are you sure?</div>
+    <div class="confirm-desc" id="c-desc"></div>
+    <div class="confirm-btns">
+      <button class="btn-cancel" onclick="closeOverlay()">Cancel</button>
+      <button class="btn-confirm-red" id="c-btn" onclick="doConfirmed()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── Course XP map (matches index.html) ──
+  const MODULE_XP = [0,50,60,60,100,70,70,120,70,70,70,150,80,80,80,90,90,200,100,100,80,100,300,100,100];
+  const MODULE_TITLES = ['','Your dev environment','How computers think','Working with data',
+    'Your first real program','Making decisions','Loops and repetition','Mini-game checkpoint',
+    'Lists and collections','Functions','User input & output','Text adventure game',
+    'Working with files','Error handling','Modules and imports','Intro to OOP','OOP in practice',
+    'RPG combat game','Algorithms & problem solving','Data structures','Intro to Git',
+    'External libraries','Capstone game project','What you\'ve learned','Where to go next'];
+  const TOTAL_MODULES = 24;
+
+  // ── Gate PIN ──
+  let gatePin = '';
+  let adminPin = '';  // loaded from users.json
+  let allUsers = []; // all users including admin
+  let editUsers = []; // non-admin users being edited
+  let pendingAction = null;
+  let pendingUser = null;
+  let isDirty = false;
+
+  // Load users.json to get admin PIN + user list
+  fetch('users.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(data => {
+      allUsers = data;
+      const admin = data.find(u => u.admin);
+      adminPin = admin ? admin.pin : '0000';
+      editUsers = data.filter(u => !u.admin).map(u => ({...u}));
+    })
+    .catch(() => { document.getElementById('gate-err').textContent = 'Could not load users.json'; });
+
+  // Gate input
+  function gp(d) {
+    if (gatePin.length>=4) return;
+    gatePin+=d; updateGateDots();
+    if (gatePin.length===4) document.getElementById('btn-enter').classList.add('show');
+  }
+  function gb() { gatePin=gatePin.slice(0,-1); updateGateDots(); document.getElementById('btn-enter').classList.remove('show'); }
+  function gc() { gatePin=''; updateGateDots(); document.getElementById('btn-enter').classList.remove('show'); }
+  function updateGateDots() {
+    for(let i=0;i<4;i++) document.getElementById('g'+i).classList.toggle('filled',i<gatePin.length);
+  }
+
+  function tryGate() {
+    if (gatePin === adminPin) {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      renderProgress();
+      renderUserManagement();
+    } else {
+      gatePin=''; updateGateDots();
+      document.getElementById('btn-enter').classList.remove('show');
+      document.getElementById('gate-err').textContent = 'Incorrect PIN — try again.';
+      document.getElementById('g-dots').classList.add('shake');
+      setTimeout(()=>document.getElementById('g-dots').classList.remove('shake'),400);
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    const gateVisible = document.getElementById('gate').style.display !== 'none';
+    if (gateVisible) {
+      if (e.key==='Enter' && gatePin.length===4) tryGate();
+      else if (e.key==='Backspace') gb();
+      else if (e.key>='0' && e.key<='9') gp(e.key);
+    }
+  });
+
+  // ── Progress helpers ──
+  function userKey(username, k) { return username.toLowerCase() + '_' + k; }
+
+  function getUserProgress(username) {
+    try {
+      const hub = JSON.parse(localStorage.getItem(userKey(username,'course')) || '{}');
+      const done = new Set(hub.done || []);
+      const doneCount = done.size;
+      const pct = Math.round(doneCount / TOTAL_MODULES * 100);
+      const xp = [...done].reduce((s,n) => s + (MODULE_XP[n]||0), 0);
+      // Current module = next incomplete in sequence
+      let currentMod = 1;
+      for (let i=1; i<=TOTAL_MODULES; i++) {
+        if (!done.has(i)) { currentMod = i; break; }
+        if (i===TOTAL_MODULES) currentMod = TOTAL_MODULES; // all done
+      }
+      const hasData = localStorage.getItem(userKey(username,'course')) !== null ||
+                      localStorage.getItem(userKey(username,'m1')) !== null;
+      return { pct, xp, currentMod, doneCount, hasData };
+    } catch(e) { return { pct:0, xp:0, currentMod:1, doneCount:0, hasData:false }; }
+  }
+
+  function renderProgress() {
+    const tbody = document.getElementById('prog-body');
+    tbody.innerHTML = '';
+    const users = allUsers.filter(u => !u.admin);
+    if (users.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="no-data">No users found.</td></tr>';
+      return;
+    }
+    users.forEach(u => {
+      const p = getUserProgress(u.name);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><div class="user-cell">
+          <div class="av">${u.avatar}</div>
+          <span class="u-name">${u.name}</span>
+        </div></td>
+        <td>
+          <div class="pct-bar-wrap">
+            <div class="pct-bar-bg"><div class="pct-bar-fill" style="width:${p.pct}%"></div></div>
+            <span class="pct-val">${p.pct}%</span>
+          </div>
+          ${!p.hasData ? '<div style="font-size:11px;color:var(--text3);margin-top:3px;">No activity yet</div>' : ''}
+        </td>
+        <td><span class="mod-label">${p.doneCount===TOTAL_MODULES ? 'Course complete!' : 'Module '+p.currentMod+' — '+MODULE_TITLES[p.currentMod]}</span></td>
+        <td><span class="xp-val">${p.xp} XP</span></td>
+        <td><button class="btn-reset-user" onclick="confirmAction('resetUser','${u.name}')">Reset</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ── User management ──
+  function renderUserManagement() {
+    const container = document.getElementById('user-rows');
+    container.innerHTML = '';
+    editUsers.forEach((u, i) => {
+      const row = document.createElement('div');
+      row.className = 'user-row';
+      row.innerHTML = `
+        <label class="inp-label">Name
+          <input class="inp-name" value="${u.name}" oninput="editUsers[${i}].name=this.value;markDirty()">
+        </label>
+        <label class="inp-label">Avatar letter
+          <input class="inp-avatar" value="${u.avatar}" maxlength="2" oninput="editUsers[${i}].avatar=this.value;markDirty()">
+        </label>
+        <label class="inp-label">PIN
+          <input class="inp-pin" value="${u.pin}" maxlength="4" inputmode="numeric" oninput="editUsers[${i}].pin=this.value;markDirty()">
+        </label>
+        <div class="row-actions">
+          <button class="btn-del" onclick="confirmAction('deleteUser',${i})">Delete</button>
+        </div>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  function markDirty() {
+    isDirty = true;
+    document.getElementById('download-wrap').classList.add('show');
+  }
+
+  function addUser() {
+    const name   = document.getElementById('new-name').value.trim();
+    const avatar = document.getElementById('new-avatar').value.trim();
+    const pin    = document.getElementById('new-pin').value.trim();
+    const errEl  = document.getElementById('add-err');
+    if (!name)              { errEl.textContent = 'Name is required.'; return; }
+    if (!avatar)            { errEl.textContent = 'Avatar letter is required.'; return; }
+    if (!/^\d{4}$/.test(pin)) { errEl.textContent = 'PIN must be exactly 4 digits.'; return; }
+    if (editUsers.some(u => u.name.toLowerCase()===name.toLowerCase())) {
+      errEl.textContent = 'A user with that name already exists.'; return;
+    }
+    errEl.textContent = '';
+    editUsers.push({ name, avatar: avatar.toUpperCase(), pin });
+    document.getElementById('new-name').value = '';
+    document.getElementById('new-avatar').value = '';
+    document.getElementById('new-pin').value = '';
+    markDirty();
+    renderUserManagement();
+    showToast('User "' + name + '" added.');
+  }
+
+  function deleteUserAt(idx) {
+    const name = editUsers[idx].name;
+    editUsers.splice(idx, 1);
+    markDirty();
+    renderUserManagement();
+    showToast('User "' + name + '" removed.');
+  }
+
+  function downloadUsers() {
+    // Rebuild full array: admin entry(s) + edited regular users
+    const admins = allUsers.filter(u => u.admin);
+    const full = [...editUsers, ...admins];
+    const json = JSON.stringify(full, null, 2);
+    const blob = new Blob([json], {type:'application/json'});
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'users.json'; a.click();
+    URL.revokeObjectURL(url);
+    isDirty = false;
+    showToast('users.json downloaded — push it to GitHub to apply changes.');
+  }
+
+  // ── Reset helpers ──
+  function resetUserProgress(username) {
+    const keys = ['course','m1','m2','m3','m4','m5','m6','m7','m8','m9','m10',
+      'm11','m12','m13','m14','m15','m16','m17','m18','m19','m20',
+      'm21','m22','m23','m24'];
+    keys.forEach(k => localStorage.removeItem(userKey(username, k)));
+  }
+
+  function resetAllUsers() {
+    allUsers.filter(u => !u.admin).forEach(u => resetUserProgress(u.name));
+  }
+
+  // ── Confirm overlay ──
+  const confirmMessages = {
+    resetAll:   { title:'Reset all users?',    desc:'This will wipe every user\'s progress, quiz answers, and XP. This cannot be undone.' },
+    resetUser:  { title:'Reset this user?',    desc:'This will wipe all progress, quiz answers, and XP for this user. Cannot be undone.' },
+    deleteUser: { title:'Delete this user?',   desc:'The user will be removed from the list. Their progress data in localStorage is not deleted.' },
+  };
+
+  function confirmAction(action, target) {
+    pendingAction = action; pendingUser = target;
+    const m = confirmMessages[action];
+    document.getElementById('c-title').textContent = m.title;
+    document.getElementById('c-desc').textContent  = m.desc;
+    document.getElementById('overlay').classList.add('show');
+  }
+
+  function closeOverlay() {
+    document.getElementById('overlay').classList.remove('show');
+    pendingAction = null; pendingUser = null;
+  }
+
+  function doConfirmed() {
+    closeOverlay();
+    if (pendingAction === 'resetAll') {
+      resetAllUsers();
+      renderProgress();
+      showToast('All user progress has been reset.');
+    } else if (pendingAction === 'resetUser') {
+      resetUserProgress(pendingUser);
+      renderProgress();
+      showToast('"' + pendingUser + '" progress has been reset.');
+    } else if (pendingAction === 'deleteUser') {
+      deleteUserAt(pendingUser);
+    }
+  }
+
+  document.getElementById('overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeOverlay();
+  });
+
+  // ── Toast ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>
