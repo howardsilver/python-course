@@ -70,6 +70,18 @@
   .nav-title { font-size: 13px; font-weight: 500; color: var(--text); }
   .nav-phase { margin-left: auto; font-size: 11px; font-weight: 500; background: var(--purple-bg); color: var(--purple-lt); padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(124,111,247,0.2); }
 
+  .nav-user {
+    display: flex; align-items: center; gap: 8px;
+    margin-left: auto; font-size: 12px; color: var(--text2);
+  }
+  .nav-logout {
+    font-family: var(--sans); font-size: 11px; font-weight: 500;
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 20px; padding: 3px 10px; color: var(--text3);
+    cursor: pointer; transition: color .15s;
+  }
+  .nav-logout:hover { color: var(--text); }
+
   /* ── LAYOUT ── */
   .page { max-width: 780px; margin: 0 auto; padding: 40px 28px 80px; }
 
@@ -300,6 +312,10 @@
   <span class="nav-sep">/</span>
   <span class="nav-title">Module 1</span>
   <span class="nav-phase">Phase 1 — Setup &amp; first steps</span>
+  <div class="nav-user" id="nav-user">
+    <span id="nav-user-name"></span>
+    <button class="nav-logout" onclick="logout()">Sign out</button>
+  </div>
 </nav>
 
 <div class="page">
@@ -542,7 +558,7 @@
 
   <!-- NAV -->
   <div class="nav-btns">
-    <a href="module-02.html" class="btn btn-primary">Next: Module 2 — How computers think →</a>
+    <a href="module-02.html" class="btn btn-primary">Next: Module 2 — Intro to VS Code →</a>
     <button class="btn" onclick="showBonusChallenge()">Bonus challenge</button>
   </div>
 
@@ -567,6 +583,17 @@
 </div><!-- /page -->
 
 <script>
+  // ── Auth ──
+  const STORAGE_KEY = 'pf_user';
+  const currentUser = localStorage.getItem(STORAGE_KEY);
+  if (!currentUser) window.location.replace('login.html');
+  function key(k) { return currentUser.toLowerCase() + '_' + k; }
+  function logout() { localStorage.removeItem(STORAGE_KEY); window.location.replace('login.html'); }
+  document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById('nav-user-name');
+    if (el) el.textContent = currentUser;
+  });
+
   const TOTAL_STEPS = 7;
   const TOTAL_QUIZ  = 3;
   const doneSteps   = new Set();
@@ -589,7 +616,7 @@
 
   function save() {
     try {
-      localStorage.setItem('m1', JSON.stringify({
+      localStorage.setItem(key('m1'), JSON.stringify({
         steps:      [...doneSteps],
         totalSteps: TOTAL_STEPS,
         quiz:       doneQuiz
@@ -639,10 +666,10 @@
     if (allSteps && allQuiz) {
       reward.classList.add('show');
       try {
-        const hub = JSON.parse(localStorage.getItem('course') || '{}');
+        const hub = JSON.parse(localStorage.getItem(key('course')) || '{}');
         hub.done  = hub.done || [];
         if (!hub.done.includes(1)) hub.done.push(1);
-        localStorage.setItem('course', JSON.stringify(hub));
+        localStorage.setItem(key('course'), JSON.stringify(hub));
       } catch(e) {}
     }
   }
@@ -672,7 +699,7 @@
   function init() {
     // Load saved state
     try {
-      const saved = JSON.parse(localStorage.getItem('m1') || '{}');
+      const saved = JSON.parse(localStorage.getItem(key('m1')) || '{}');
       if (saved.steps) saved.steps.forEach(i => doneSteps.add(i));
       if (saved.quiz)  Object.assign(doneQuiz, saved.quiz);
     } catch(e) {}

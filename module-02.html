@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 2 — Intro to VS Code · Python Foundations</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+  :root {
+    --bg:#0f1117;--bg2:#181c27;--bg3:#1e2333;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+    --purple:#7c6ff7;--purple-lt:#a99df9;--purple-bg:rgba(124,111,247,0.12);
+    --teal:#34d399;--teal-bg:rgba(52,211,153,0.10);
+    --amber:#fbbf24;--amber-bg:rgba(251,191,36,0.10);
+    --blue:#60a5fa;--blue-bg:rgba(96,165,250,0.10);
+    --red:#f87171;
+    --text:#e2e4ed;--text2:#8b8fa8;--text3:#555974;
+    --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+    --radius:10px;--radius-lg:16px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;}
+
+  nav{display:flex;align-items:center;gap:12px;padding:14px 28px;border-bottom:1px solid var(--border);}
+  .nav-back{display:flex;align-items:center;gap:6px;color:var(--text2);text-decoration:none;
+    font-size:13px;transition:color .2s;cursor:pointer;background:none;border:none;font-family:var(--sans);}
+  .nav-back:hover{color:var(--text);}
+  .nav-back svg{width:14px;height:14px;}
+  .nav-sep{color:var(--text3);font-size:13px;}
+  .nav-title{font-size:13px;font-weight:500;color:var(--text);}
+  .nav-phase{font-size:11px;font-weight:500;background:var(--purple-bg);color:var(--purple-lt);
+    padding:3px 10px;border-radius:20px;border:1px solid rgba(124,111,247,0.2);}
+  .nav-user{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;color:var(--text2);}
+  .nav-logout{font-family:var(--sans);font-size:11px;font-weight:500;background:var(--bg3);
+    border:1px solid var(--border2);border-radius:20px;padding:3px 10px;color:var(--text3);
+    cursor:pointer;transition:color .15s;}
+  .nav-logout:hover{color:var(--text);}
+
+  .page{max-width:780px;margin:0 auto;padding:40px 28px 80px;}
+
+  .module-header{margin-bottom:36px;}
+  .module-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+  .eyebrow-pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;border:1px solid transparent;}
+  .pill-num  {background:var(--purple-bg);color:var(--purple-lt);border-color:rgba(124,111,247,0.2);}
+  .pill-time {background:var(--amber-bg); color:var(--amber);    border-color:rgba(251,191,36,0.2);}
+  .pill-type {background:var(--blue-bg);  color:var(--blue);     border-color:rgba(96,165,250,0.2);}
+  h1{font-size:28px;font-weight:600;color:#fff;line-height:1.2;margin-bottom:10px;}
+  .module-desc{font-size:15px;color:var(--text2);line-height:1.65;max-width:600px;}
+
+  .progress-section{margin-bottom:32px;}
+  .progress-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:8px;}
+  .progress-bar-bg{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:var(--purple);border-radius:3px;transition:width .4s ease;}
+
+  .section-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--text3);margin-bottom:14px;margin-top:36px;}
+  .section-label:first-child{margin-top:0;}
+
+  .objectives{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;}
+  .objective{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text2);}
+  .obj-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:7px;}
+
+  hr{border:none;border-top:1px solid var(--border);margin:32px 0;}
+
+  /* ── STEPS ── */
+  .steps{display:flex;flex-direction:column;gap:6px;}
+  .step{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);
+    padding:16px 18px;cursor:pointer;transition:border-color .2s,background .2s;user-select:none;}
+  .step:hover{border-color:var(--border2);background:var(--bg3);}
+  .step.done{border-color:rgba(52,211,153,0.3);background:rgba(52,211,153,0.05);}
+  .step-top{display:flex;align-items:flex-start;gap:12px;}
+  .step-check{width:22px;height:22px;border-radius:50%;flex-shrink:0;margin-top:1px;
+    border:1.5px solid var(--border2);background:var(--bg3);display:flex;align-items:center;
+    justify-content:center;transition:background .2s,border-color .2s;}
+  .step.done .step-check{background:var(--teal);border-color:var(--teal);}
+  .step-check svg{width:11px;height:11px;opacity:0;transition:opacity .2s;}
+  .step.done .step-check svg{opacity:1;}
+  .step-body{flex:1;}
+  .step-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;transition:color .2s;}
+  .step.done .step-title{color:var(--teal);}
+  .step-desc{font-size:13px;color:var(--text2);line-height:1.6;}
+  .step-meta{display:flex;align-items:center;gap:10px;margin-top:8px;}
+  .step-time{font-size:11px;color:var(--text3);}
+  .step-hint{display:inline-block;font-size:11px;color:var(--purple-lt);background:var(--purple-bg);
+    border:1px solid rgba(124,111,247,0.15);padding:3px 9px;border-radius:20px;cursor:pointer;
+    transition:background .15s;text-decoration:none;}
+  .step-hint:hover{background:rgba(124,111,247,0.2);}
+  .hint-box{display:none;margin-top:10px;font-size:13px;color:var(--text2);background:var(--bg3);
+    border:1px solid var(--border2);border-radius:var(--radius);padding:12px 14px;line-height:1.6;}
+
+  /* ── VS CODE DIAGRAM ── */
+  .vscode-diagram{background:#1e1e2e;border:1px solid var(--border2);border-radius:var(--radius-lg);
+    overflow:hidden;margin:12px 0;font-family:var(--mono);}
+  .vscode-titlebar{background:#181825;padding:8px 14px;display:flex;align-items:center;gap:8px;
+    border-bottom:1px solid rgba(255,255,255,0.06);}
+  .vscode-dots{display:flex;gap:5px;}
+  .vscode-dot{width:10px;height:10px;border-radius:50%;}
+  .vscode-title{font-size:11px;color:#6e6a86;margin-left:8px;}
+  .vscode-body{display:flex;min-height:200px;}
+  .vscode-sidebar{width:36px;background:#181825;border-right:1px solid rgba(255,255,255,0.06);
+    display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:10px;}
+  .vscode-icon{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;
+    justify-content:center;cursor:pointer;transition:background .15s;}
+  .vscode-icon:hover{background:rgba(255,255,255,0.08);}
+  .vscode-icon.active{background:rgba(124,111,247,0.2);}
+  .vscode-icon svg{width:16px;height:16px;}
+  .vscode-explorer{width:160px;background:#1a1a2e;border-right:1px solid rgba(255,255,255,0.06);padding:8px 0;}
+  .vscode-explorer-title{font-size:10px;color:#6e6a86;padding:4px 12px;letter-spacing:.08em;text-transform:uppercase;}
+  .vscode-file{font-size:12px;padding:3px 12px 3px 24px;color:#cdd6f4;display:flex;align-items:center;gap:6px;cursor:pointer;}
+  .vscode-file:hover{background:rgba(255,255,255,0.05);}
+  .vscode-file.active{background:rgba(124,111,247,0.15);color:#a99df9;}
+  .vscode-folder{font-size:12px;padding:3px 12px;color:#cdd6f4;display:flex;align-items:center;gap:4px;cursor:pointer;}
+  .vscode-editor{flex:1;padding:12px 16px;}
+  .vscode-tab{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#a99df9;
+    background:rgba(124,111,247,0.1);border-bottom:1px solid var(--purple);
+    padding:4px 12px;margin-bottom:10px;border-radius:4px 4px 0 0;}
+  .vscode-code{font-size:12px;line-height:1.8;color:#cdd6f4;}
+  .vscode-code .kw{color:#cba6f7;}
+  .vscode-code .fn{color:#89b4fa;}
+  .vscode-code .str{color:#a6e3a1;}
+  .vscode-code .cmt{color:#585b70;font-style:italic;}
+  .vscode-code .ln{color:#45475a;margin-right:16px;user-select:none;}
+  .vscode-terminal{border-top:1px solid rgba(255,255,255,0.06);padding:8px 14px;}
+  .vscode-terminal-title{font-size:10px;color:#6e6a86;margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase;}
+  .vscode-terminal-line{font-size:12px;color:#a6e3a1;line-height:1.6;}
+  .vscode-terminal-prompt{color:#89b4fa;}
+
+  /* ── LABEL CALLOUT ── */
+  .callout{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);
+    padding:10px 14px;font-size:13px;color:var(--text2);line-height:1.6;margin:8px 0;}
+  .callout strong{color:var(--text);font-weight:500;}
+
+  /* ── THEME PICKER ── */
+  .theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:10px 0;}
+  .theme-card{border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;
+    cursor:pointer;transition:border-color .15s;}
+  .theme-card:hover{border-color:var(--border2);}
+  .theme-card.picked{border-color:var(--purple);}
+  .theme-preview{height:52px;display:flex;align-items:stretch;}
+  .theme-sidebar-strip{width:28px;}
+  .theme-main{flex:1;padding:6px 8px;display:flex;flex-direction:column;gap:3px;}
+  .theme-line{height:5px;border-radius:2px;opacity:.7;}
+  .theme-name{font-size:11px;font-weight:500;color:var(--text2);padding:5px 8px;
+    background:var(--bg3);text-align:center;}
+  .theme-card.picked .theme-name{color:var(--purple-lt);}
+  .theme-result{font-size:12px;color:var(--teal);margin-top:8px;height:16px;}
+
+  /* ── QUIZ ── */
+  .quiz{display:flex;flex-direction:column;gap:20px;}
+  .quiz-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;}
+  .quiz-q{font-size:14px;font-weight:500;color:var(--text);margin-bottom:14px;line-height:1.5;}
+  .quiz-q code{font-family:var(--mono);font-size:12px;background:#0a0d14;color:var(--purple-lt);padding:1px 6px;border-radius:4px;}
+  .quiz-opts{display:flex;flex-direction:column;gap:7px;}
+  .quiz-opt{text-align:left;font-family:var(--sans);font-size:13px;color:var(--text2);
+    background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+    padding:10px 14px;cursor:pointer;transition:border-color .15s,background .15s;line-height:1.4;}
+  .quiz-opt:hover:not([disabled]){border-color:var(--border2);color:var(--text);}
+  .quiz-opt.correct{background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.4);color:var(--teal);}
+  .quiz-opt.wrong  {background:rgba(248,113,113,0.08);border-color:rgba(248,113,113,0.3);color:var(--red);}
+  .quiz-opt[disabled]{cursor:default;}
+  .quiz-feedback{font-size:12px;margin-top:10px;padding:10px 14px;border-radius:var(--radius);
+    line-height:1.5;display:none;}
+  .quiz-feedback.show{display:block;}
+  .quiz-feedback.ok{background:rgba(52,211,153,0.08);color:#6ee7b7;border:1px solid rgba(52,211,153,0.2);}
+  .quiz-feedback.no{background:rgba(248,113,113,0.08);color:#fca5a5;border:1px solid rgba(248,113,113,0.2);}
+
+  /* ── REWARD ── */
+  .reward{background:var(--purple-bg);border:1px solid rgba(124,111,247,0.25);border-radius:var(--radius-lg);
+    padding:18px 22px;display:none;align-items:center;gap:16px;margin-top:28px;}
+  .reward.show{display:flex;animation:pop .35s ease;}
+  @keyframes pop{0%{transform:scale(.95);opacity:0}100%{transform:scale(1);opacity:1}}
+  .xp-badge{background:var(--purple);color:#fff;font-size:13px;font-weight:600;
+    padding:6px 14px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+  .reward-text{font-size:14px;color:var(--purple-lt);line-height:1.5;}
+  .reward-text strong{color:#fff;}
+
+  .nav-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px;}
+  .btn{font-family:var(--sans);font-size:13px;font-weight:500;padding:9px 18px;
+    border-radius:var(--radius);cursor:pointer;border:1px solid var(--border2);
+    background:var(--bg2);color:var(--text2);transition:background .15s,color .15s;text-decoration:none;display:inline-block;}
+  .btn:hover{background:var(--bg3);color:var(--text);}
+  .btn-primary{background:var(--purple);color:#fff;border-color:var(--purple);}
+  .btn-primary:hover{background:#6c5fe6;border-color:#6c5fe6;color:#fff;}
+
+  @media(max-width:500px){.page{padding:24px 16px 60px;}h1{font-size:22px;}nav{padding:12px 16px;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <button class="nav-back" onclick="window.location.href='index.html'">
+    <svg viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Course hub
+  </button>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">Module 2</span>
+  <span class="nav-phase">Phase 1 — Setup &amp; first steps</span>
+  <div class="nav-user">
+    <span id="nav-user-name"></span>
+    <button class="nav-logout" onclick="logout()">Sign out</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="module-header">
+    <div class="module-eyebrow">
+      <span class="eyebrow-pill pill-num">Module 2 of 25</span>
+      <span class="eyebrow-pill pill-time">~50 min</span>
+      <span class="eyebrow-pill pill-type">Setup</span>
+    </div>
+    <h1>Intro to VS Code</h1>
+    <p class="module-desc">VS Code is where you'll write every program in this course. This module gets you completely comfortable in it — what everything is, how to run your code, and how to make it feel like yours.</p>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-row">
+      <span id="prog-label">0 of 6 steps complete</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="section-label">What you'll learn</div>
+  <div class="objectives">
+    <div class="objective"><div class="obj-dot"></div><span>Recognise every part of the VS Code interface and know what it's for</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Open a project folder the right way — how professionals do it</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Create, edit, and save Python files in VS Code</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Run a Python file using the play button and read the output</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Use the built-in terminal without fear</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Personalise VS Code with your own colour theme</span></div>
+  </div>
+
+  <hr>
+
+  <div class="section-label">Steps — click each one when done</div>
+  <div class="steps" id="steps-list">
+
+    <!-- STEP 1 -->
+    <div class="step" data-idx="0" onclick="toggleStep(0)">
+      <div class="step-top">
+        <div class="step-check"><svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="step-body">
+          <div class="step-title">Meet the VS Code interface</div>
+          <div class="step-desc">Open VS Code. Don't worry about anything on screen yet — just look. The diagram below shows you what every part is called and what it does. Most of it you'll never need to touch as a beginner.</div>
+
+          <div class="vscode-diagram" style="margin-top:12px;" onclick="event.stopPropagation()">
+            <div class="vscode-titlebar">
+              <div class="vscode-dots">
+                <div class="vscode-dot" style="background:#ff5f57"></div>
+                <div class="vscode-dot" style="background:#febc2e"></div>
+                <div class="vscode-dot" style="background:#28c840"></div>
+              </div>
+              <div class="vscode-title">Visual Studio Code — python-course</div>
+            </div>
+            <div class="vscode-body">
+              <div class="vscode-sidebar">
+                <div class="vscode-icon active" title="Explorer">
+                  <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="8" height="10" rx="1" stroke="#a99df9" stroke-width="1"/><rect x="5" y="5" width="8" height="10" rx="1" stroke="#6e6a86" stroke-width="1"/></svg>
+                </div>
+                <div class="vscode-icon" title="Search">
+                  <svg viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4" stroke="#6e6a86" stroke-width="1.2"/><line x1="10" y1="10" x2="13" y2="13" stroke="#6e6a86" stroke-width="1.2" stroke-linecap="round"/></svg>
+                </div>
+                <div class="vscode-icon" title="Extensions">
+                  <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" stroke="#6e6a86" stroke-width="1"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="#6e6a86" stroke-width="1"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="#6e6a86" stroke-width="1"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="#6e6a86" stroke-width="1"/></svg>
+                </div>
+              </div>
+              <div class="vscode-explorer">
+                <div class="vscode-explorer-title">Explorer</div>
+                <div class="vscode-folder">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 3h10v7H1z" fill="#89b4fa" opacity=".3"/><path d="M1 3h10v7H1z" stroke="#89b4fa" stroke-width="1"/></svg>
+                  python-course
+                </div>
+                <div class="vscode-file active">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="1" y="1" width="8" height="8" rx="1" stroke="#a99df9" stroke-width="1"/></svg>
+                  hello.py
+                </div>
+                <div class="vscode-file">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="1" y="1" width="8" height="8" rx="1" stroke="#585b70" stroke-width="1"/></svg>
+                  notes.py
+                </div>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;">
+                <div class="vscode-editor" style="flex:1;">
+                  <div class="vscode-tab">hello.py</div>
+                  <div class="vscode-code">
+                    <span class="ln">1</span><span class="cmt"># My first program</span><br>
+                    <span class="ln">2</span><span class="fn">print</span>(<span class="str">"Hello, world!"</span>)<br>
+                    <span class="ln">3</span><span class="fn">print</span>(<span class="str">"I am learning Python"</span>)
+                  </div>
+                </div>
+                <div class="vscode-terminal">
+                  <div class="vscode-terminal-title">Terminal</div>
+                  <div class="vscode-terminal-line"><span class="vscode-terminal-prompt">$</span> python hello.py</div>
+                  <div class="vscode-terminal-line" style="color:#cdd6f4;">Hello, world!</div>
+                  <div class="vscode-terminal-line" style="color:#cdd6f4;">I am learning Python</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;" onclick="event.stopPropagation()">
+            <div class="callout"><strong style="color:var(--blue)">Activity bar</strong> — the icons on the far left. Click the top one (Explorer) to see your files.</div>
+            <div class="callout"><strong style="color:var(--blue)">Explorer panel</strong> — shows all files in your project folder. This is your file browser.</div>
+            <div class="callout"><strong style="color:var(--blue)">Editor area</strong> — the big centre area where you write code. Tabs at the top show open files.</div>
+            <div class="callout"><strong style="color:var(--blue)">Terminal</strong> — a command line built right into VS Code. Python output appears here.</div>
+          </div>
+
+          <div class="step-meta"><span class="step-time">~8 min</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" data-idx="1" onclick="toggleStep(1)">
+      <div class="step-top">
+        <div class="step-check"><svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="step-body">
+          <div class="step-title">Open your project folder</div>
+          <div class="step-desc">In VS Code, always open a <strong style="color:var(--text)">folder</strong>, not individual files. This tells VS Code "this is my project". Click <strong style="color:var(--text)">File → Open Folder</strong>, navigate to your <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#a6e3a1;padding:1px 5px;border-radius:4px">python-course</code> folder on your Desktop, and click Select Folder. You'll see it appear in the Explorer panel on the left.</div>
+          <div class="step-meta">
+            <span class="step-time">~3 min</span>
+            <span class="step-hint" onclick="event.stopPropagation(); showHint(1)">Why open a folder instead of a file?</span>
+          </div>
+          <div class="hint-box" id="hint-1">Opening a folder lets VS Code understand your whole project at once. It can find related files, run the right Python interpreter, and give you better autocomplete. Opening a single file is like reading one page of a book with no context — VS Code works much better when it sees the whole picture.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" data-idx="2" onclick="toggleStep(2)">
+      <div class="step-top">
+        <div class="step-check"><svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="step-body">
+          <div class="step-title">Create and edit a Python file</div>
+          <div class="step-desc">In the Explorer panel, hover over your folder name and click the <strong style="color:var(--text)">New File</strong> icon (a page with a + sign). Name it <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#a6e3a1;padding:1px 5px;border-radius:4px">practice.py</code> and press Enter. It opens in the editor. Type something — anything — and press <strong style="color:var(--text)">Ctrl+S</strong> to save. Notice the dot on the tab disappears when saved.</div>
+          <div class="step-meta">
+            <span class="step-time">~5 min</span>
+            <span class="step-hint" onclick="event.stopPropagation(); showHint(2)">What does the dot on the tab mean?</span>
+          </div>
+          <div class="hint-box" id="hint-2">A dot (●) on a file tab means there are unsaved changes. VS Code will never lose your work — it keeps track — but Python can only run the saved version of your file. Get into the habit of pressing Ctrl+S before you run anything.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" data-idx="3" onclick="toggleStep(3)">
+      <div class="step-top">
+        <div class="step-check"><svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="step-body">
+          <div class="step-title">Run a Python file — two ways</div>
+          <div class="step-desc">With <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#a6e3a1;padding:1px 5px;border-radius:4px">hello.py</code> open, try both methods:</div>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;" onclick="event.stopPropagation()">
+            <div class="callout"><strong style="color:var(--teal)">Method 1 — Play button:</strong> Look for the triangle ▶ in the top-right corner of VS Code. Click it. A terminal opens at the bottom and your output appears. This is the easiest way.</div>
+            <div class="callout"><strong style="color:var(--teal)">Method 2 — Terminal:</strong> Press <strong style="color:var(--text)">Ctrl+`</strong> (the backtick key, top-left of keyboard) to open the terminal. Type <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#a6e3a1;padding:1px 5px;border-radius:4px">python hello.py</code> and press Enter. Same result, more control.</div>
+          </div>
+          <div class="step-meta">
+            <span class="step-time">~5 min</span>
+            <span class="step-hint" onclick="event.stopPropagation(); showHint(3)">Which method should I use?</span>
+          </div>
+          <div class="hint-box" id="hint-3">Use the play button for quick runs while learning. Use the terminal when you get to more advanced work — it gives you more control and matches how professional developers run code. For now, either is fine.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step" data-idx="4" onclick="toggleStep(4)">
+      <div class="step-top">
+        <div class="step-check"><svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="step-body">
+          <div class="step-title">Three shortcuts worth memorising now</div>
+          <div class="step-desc">These three keyboard shortcuts will save you time every single day. Practise each one right now while VS Code is open.</div>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;" onclick="event.stopPropagation()">
+            <div class="callout"><strong style="color:var(--amber)">Ctrl+S</strong> — Save the current file. Do this constantly. Every time before you run.</div>
+            <div class="callout"><strong style="color:var(--amber)">Ctrl+Z</strong> — Undo the last thing you typed. Works up to hundreds of steps back.</div>
+            <div class="callout"><strong style="color:var(--amber)">Ctrl+`</strong> — Open or close the terminal. The backtick key is top-left, under Escape.</div>
+          </div>
+          <div class="step-meta"><span class="step-time">~3 min</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step" data-idx="5" onclick="toggleStep(5)">
+      <div class="step-top">
+        <div class="step-check"><svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="step-body">
+          <div class="step-title">Pick your colour theme</div>
+          <div class="step-desc">You'll stare at this editor for hundreds of hours. Make it look good to you. In VS Code: <strong style="color:var(--text)">File → Preferences → Color Theme</strong> (or press <strong style="color:var(--text)">Ctrl+K Ctrl+T</strong>). Browse through them — the arrow keys let you preview in real time. Click below to note which one you picked.</div>
+
+          <div class="theme-grid" onclick="event.stopPropagation()">
+            <div class="theme-card" onclick="pickTheme(this,'One Dark Pro')">
+              <div class="theme-preview">
+                <div class="theme-sidebar-strip" style="background:#21252b"></div>
+                <div class="theme-main" style="background:#282c34">
+                  <div class="theme-line" style="background:#e06c75;width:70%"></div>
+                  <div class="theme-line" style="background:#98c379;width:50%"></div>
+                  <div class="theme-line" style="background:#61afef;width:80%"></div>
+                </div>
+              </div>
+              <div class="theme-name">One Dark Pro</div>
+            </div>
+            <div class="theme-card" onclick="pickTheme(this,'GitHub Dark')">
+              <div class="theme-preview">
+                <div class="theme-sidebar-strip" style="background:#161b22"></div>
+                <div class="theme-main" style="background:#0d1117">
+                  <div class="theme-line" style="background:#ff7b72;width:60%"></div>
+                  <div class="theme-line" style="background:#7ee787;width:75%"></div>
+                  <div class="theme-line" style="background:#79c0ff;width:55%"></div>
+                </div>
+              </div>
+              <div class="theme-name">GitHub Dark</div>
+            </div>
+            <div class="theme-card" onclick="pickTheme(this,'Dracula')">
+              <div class="theme-preview">
+                <div class="theme-sidebar-strip" style="background:#21222c"></div>
+                <div class="theme-main" style="background:#282a36">
+                  <div class="theme-line" style="background:#ff79c6;width:65%"></div>
+                  <div class="theme-line" style="background:#50fa7b;width:45%"></div>
+                  <div class="theme-line" style="background:#8be9fd;width:70%"></div>
+                </div>
+              </div>
+              <div class="theme-name">Dracula</div>
+            </div>
+            <div class="theme-card" onclick="pickTheme(this,'Monokai')">
+              <div class="theme-preview">
+                <div class="theme-sidebar-strip" style="background:#1e1f1c"></div>
+                <div class="theme-main" style="background:#272822">
+                  <div class="theme-line" style="background:#f92672;width:55%"></div>
+                  <div class="theme-line" style="background:#a6e22e;width:80%"></div>
+                  <div class="theme-line" style="background:#66d9e8;width:60%"></div>
+                </div>
+              </div>
+              <div class="theme-name">Monokai</div>
+            </div>
+            <div class="theme-card" onclick="pickTheme(this,'Solarized Light')">
+              <div class="theme-preview">
+                <div class="theme-sidebar-strip" style="background:#eee8d5"></div>
+                <div class="theme-main" style="background:#fdf6e3">
+                  <div class="theme-line" style="background:#dc322f;width:65%"></div>
+                  <div class="theme-line" style="background:#859900;width:50%"></div>
+                  <div class="theme-line" style="background:#268bd2;width:75%"></div>
+                </div>
+              </div>
+              <div class="theme-name">Solarized Light</div>
+            </div>
+            <div class="theme-card" onclick="pickTheme(this,'Something else')">
+              <div class="theme-preview">
+                <div class="theme-sidebar-strip" style="background:#333"></div>
+                <div class="theme-main" style="background:#444;display:flex;align-items:center;justify-content:center;">
+                  <span style="font-size:18px;color:#aaa;">?</span>
+                </div>
+              </div>
+              <div class="theme-name">Something else</div>
+            </div>
+          </div>
+          <div class="theme-result" id="theme-result"></div>
+
+          <div class="step-meta"><span class="step-time">~5 min</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <!-- QUIZ -->
+  <div class="section-label">Quick quiz — 3 questions</div>
+  <div class="quiz" id="quiz">
+
+    <div class="quiz-card" id="qc-0">
+      <div class="quiz-q">1. In VS Code, where does your Python output appear when you run a file?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer(0,this,false)">In the Explorer panel on the left</button>
+        <button class="quiz-opt" onclick="answer(0,this,true)">In the Terminal panel at the bottom</button>
+        <button class="quiz-opt" onclick="answer(0,this,false)">In a separate pop-up window</button>
+        <button class="quiz-opt" onclick="answer(0,this,false)">It gets saved to a file automatically</button>
+      </div>
+      <div class="quiz-feedback" id="qf-0"></div>
+    </div>
+
+    <div class="quiz-card" id="qc-1">
+      <div class="quiz-q">2. What does the dot (●) on a file tab mean?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer(1,this,false)">The file has a syntax error</button>
+        <button class="quiz-opt" onclick="answer(1,this,false)">The file is currently running</button>
+        <button class="quiz-opt" onclick="answer(1,this,true)">The file has unsaved changes</button>
+        <button class="quiz-opt" onclick="answer(1,this,false)">The file is read-only</button>
+      </div>
+      <div class="quiz-feedback" id="qf-1"></div>
+    </div>
+
+    <div class="quiz-card" id="qc-2">
+      <div class="quiz-q">3. What is the keyboard shortcut to save a file in VS Code?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer(2,this,false)">Ctrl+R</button>
+        <button class="quiz-opt" onclick="answer(2,this,false)">Ctrl+P</button>
+        <button class="quiz-opt" onclick="answer(2,this,true)">Ctrl+S</button>
+        <button class="quiz-opt" onclick="answer(2,this,false)">Ctrl+Enter</button>
+      </div>
+      <div class="quiz-feedback" id="qf-2"></div>
+    </div>
+
+  </div>
+
+  <div class="reward" id="reward">
+    <div class="xp-badge">+60 XP</div>
+    <div class="reward-text"><strong>Module 2 complete!</strong> VS Code is no longer a mystery. You know your way around, you can run Python files, and you've made it your own. Next up — how Python actually thinks.</div>
+  </div>
+
+  <div class="nav-btns">
+    <a href="module-03.html" class="btn btn-primary">Next: Module 3 — How computers think →</a>
+    <a href="module-01.html" class="btn">← Back to Module 1</a>
+  </div>
+
+</div>
+
+<script>
+  // ── Auth ──
+  const STORAGE_KEY = 'pf_user';
+  const currentUser = localStorage.getItem(STORAGE_KEY);
+  if (!currentUser) window.location.replace('login.html');
+  function key(k) { return currentUser.toLowerCase() + '_' + k; }
+  function logout() { localStorage.removeItem(STORAGE_KEY); window.location.replace('login.html'); }
+  document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById('nav-user-name');
+    if (el) el.textContent = currentUser;
+  });
+
+  const TOTAL_STEPS = 6;
+  const TOTAL_QUIZ  = 3;
+  const doneSteps   = new Set();
+  const doneQuiz    = {};
+
+  const feedbackOk = [
+    "Correct! The Terminal panel at the bottom of VS Code is where all Python output appears when you run a file.",
+    "Correct! The dot means unsaved changes. Press Ctrl+S to save and make it disappear.",
+    "Correct! Ctrl+S saves the current file. Get into the habit of pressing it constantly."
+  ];
+  const feedbackNo = [
+    "Not quite. Output appears in the Terminal panel at the bottom — either via the play button or Ctrl+`.",
+    "Not quite. The dot means unsaved changes are waiting to be saved with Ctrl+S.",
+    "Not quite. Ctrl+S is the save shortcut. It's one of the most important things to memorise."
+  ];
+
+  function save() {
+    try {
+      localStorage.setItem(key('m2'), JSON.stringify({
+        steps:      [...doneSteps],
+        totalSteps: TOTAL_STEPS,
+        quiz:       doneQuiz
+      }));
+    } catch(e) {}
+  }
+
+  function updateProgress() {
+    const n   = doneSteps.size;
+    const pct = Math.round(n / TOTAL_STEPS * 100);
+    document.getElementById('prog-label').textContent = n + ' of ' + TOTAL_STEPS + ' steps complete';
+    document.getElementById('prog-pct').textContent   = pct + '%';
+    document.getElementById('prog-fill').style.width  = pct + '%';
+  }
+
+  function toggleStep(i) {
+    if (doneSteps.has(i)) doneSteps.delete(i);
+    else doneSteps.add(i);
+    document.querySelectorAll('.step')[i].classList.toggle('done', doneSteps.has(i));
+    updateProgress();
+    save();
+    checkReward();
+  }
+
+  function answer(qi, btn, correct) {
+    if (doneQuiz[qi] !== undefined) return;
+    const card = document.getElementById('qc-' + qi);
+    const opts = card.querySelectorAll('.quiz-opt');
+    const selectedIdx = Array.from(opts).indexOf(btn);
+    opts.forEach(b => {
+      b.disabled = true;
+      if (b.getAttribute('onclick').includes('true')) b.classList.add('correct');
+    });
+    if (!correct) btn.classList.add('wrong');
+    const fb = document.getElementById('qf-' + qi);
+    fb.textContent = correct ? feedbackOk[qi] : feedbackNo[qi];
+    fb.className   = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
+    doneQuiz[qi]   = { correct, selected: selectedIdx };
+    save();
+    checkReward();
+  }
+
+  function checkReward() {
+    const allSteps = doneSteps.size === TOTAL_STEPS;
+    const allQuiz  = Object.keys(doneQuiz).length === TOTAL_QUIZ;
+    if (allSteps && allQuiz) {
+      document.getElementById('reward').classList.add('show');
+      try {
+        const hub = JSON.parse(localStorage.getItem(key('course')) || '{}');
+        hub.done  = hub.done || [];
+        if (!hub.done.includes(2)) hub.done.push(2);
+        localStorage.setItem(key('course'), JSON.stringify(hub));
+      } catch(e) {}
+    }
+  }
+
+  function showHint(i) {
+    const box = document.getElementById('hint-' + i);
+    if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function pickTheme(card, name) {
+    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('picked'));
+    card.classList.add('picked');
+    document.getElementById('theme-result').textContent =
+      name === 'Something else' ? 'Nice — whatever looks good to you is the right choice.' :
+      'Good choice. ' + name + ' is a favourite among developers.';
+  }
+
+  function init() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(key('m2')) || '{}');
+      if (saved.steps) saved.steps.forEach(i => doneSteps.add(i));
+      if (saved.quiz)  Object.assign(doneQuiz, saved.quiz);
+    } catch(e) {}
+
+    document.querySelectorAll('.step').forEach((el, i) => {
+      if (doneSteps.has(i)) el.classList.add('done');
+    });
+
+    Object.entries(doneQuiz).forEach(([qi, val]) => {
+      const { correct, selected } = val;
+      const card = document.getElementById('qc-' + qi);
+      if (!card) return;
+      const opts = card.querySelectorAll('.quiz-opt');
+      opts.forEach((b, idx) => {
+        b.disabled = true;
+        const isCorrect = b.getAttribute('onclick').includes('true');
+        if (idx === selected) b.classList.add(correct ? 'correct' : 'wrong');
+        if (!correct && isCorrect) b.classList.add('correct');
+      });
+      const fb = document.getElementById('qf-' + qi);
+      if (fb) {
+        fb.textContent = correct ? feedbackOk[qi] : feedbackNo[qi];
+        fb.className   = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
+      }
+    });
+
+    updateProgress();
+    checkReward();
+  }
+
+  init();
+</script>
+</body>
+</html>

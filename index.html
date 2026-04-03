@@ -350,7 +350,7 @@
   <div class="overall">
     <div class="bar-row">
       <span>Overall progress</span>
-      <span id="bar-label">0 / 24 modules</span>
+      <span id="bar-label">0 / 25 modules</span>
     </div>
     <div class="bar-bg">
       <div class="bar-fill" id="overall-fill" style="width:0%"></div>
@@ -422,38 +422,39 @@
   // ── Course data ──
   const PHASES = [
     { id: 1, name: 'Setup & first steps', cls: 'ph1', numCls: 'num-ph1', modules: [
-      { n:1,  title:'Your dev environment',     time:'45 min',  badge:'b-setup', bl:'setup',   xp:50,  file:'module-01.html' },
-      { n:2,  title:'How computers think',       time:'50 min',  badge:'b-quiz',  bl:'quiz',    xp:60,  file:'module-02.html' },
-      { n:3,  title:'Working with data',         time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:60,  file:'module-03.html' },
-      { n:4,  title:'Your first real program',   time:'60 min',  badge:'b-proj',  bl:'project', xp:100, file:'module-04.html' },
+      { n:1,  title:'Your dev environment',        time:'45 min',  badge:'b-setup', bl:'setup',   xp:50,  file:'module-01.html' },
+      { n:2,  title:'Intro to VS Code',            time:'50 min',  badge:'b-setup', bl:'setup',   xp:60,  file:'module-02.html' },
+      { n:3,  title:'How computers think',         time:'50 min',  badge:'b-quiz',  bl:'quiz',    xp:60,  file:'module-03.html' },
+      { n:4,  title:'Working with data',           time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:60,  file:'module-04.html' },
+      { n:5,  title:'Your first real program',     time:'60 min',  badge:'b-proj',  bl:'project', xp:100, file:'module-05.html' },
     ]},
     { id: 2, name: 'Core Python', cls: 'ph2', numCls: 'num-ph2', modules: [
-      { n:5,  title:'Making decisions',          time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-05.html' },
-      { n:6,  title:'Loops and repetition',      time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-06.html' },
-      { n:7,  title:'Mini-game checkpoint',      time:'70 min',  badge:'b-game',  bl:'game',    xp:120, file:'module-07.html' },
-      { n:8,  title:'Lists and collections',     time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-08.html' },
-      { n:9,  title:'Functions',                 time:'65 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-09.html' },
-      { n:10, title:'User input & output',       time:'50 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-10.html' },
-      { n:11, title:'Text adventure game',       time:'90 min',  badge:'b-game',  bl:'game',    xp:150, file:'module-11.html' },
+      { n:6,  title:'Making decisions',            time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-06.html' },
+      { n:7,  title:'Loops and repetition',        time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-07.html' },
+      { n:8,  title:'Mini-game checkpoint',        time:'70 min',  badge:'b-game',  bl:'game',    xp:120, file:'module-08.html' },
+      { n:9,  title:'Lists and collections',       time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-09.html' },
+      { n:10, title:'Functions',                   time:'65 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-10.html' },
+      { n:11, title:'User input & output',         time:'50 min',  badge:'b-quiz',  bl:'quiz',    xp:70,  file:'module-11.html' },
+      { n:12, title:'Text adventure game',         time:'90 min',  badge:'b-game',  bl:'game',    xp:150, file:'module-12.html' },
     ]},
     { id: 3, name: 'Intermediate skills', cls: 'ph3', numCls: 'num-ph3', modules: [
-      { n:12, title:'Working with files',        time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:80,  file:'module-12.html' },
-      { n:13, title:'Error handling',            time:'50 min',  badge:'b-quiz',  bl:'quiz',    xp:80,  file:'module-13.html' },
-      { n:14, title:'Modules and imports',       time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:80,  file:'module-14.html' },
-      { n:15, title:'Intro to OOP',              time:'70 min',  badge:'b-quiz',  bl:'quiz',    xp:90,  file:'module-15.html' },
-      { n:16, title:'OOP in practice',           time:'65 min',  badge:'b-quiz',  bl:'quiz',    xp:90,  file:'module-16.html' },
-      { n:17, title:'RPG combat game',           time:'2 hrs',   badge:'b-game',  bl:'game',    xp:200, file:'module-17.html' },
+      { n:13, title:'Working with files',          time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:80,  file:'module-13.html' },
+      { n:14, title:'Error handling',              time:'50 min',  badge:'b-quiz',  bl:'quiz',    xp:80,  file:'module-14.html' },
+      { n:15, title:'Modules and imports',         time:'55 min',  badge:'b-quiz',  bl:'quiz',    xp:80,  file:'module-15.html' },
+      { n:16, title:'Intro to OOP',               time:'70 min',  badge:'b-quiz',  bl:'quiz',    xp:90,  file:'module-16.html' },
+      { n:17, title:'OOP in practice',             time:'65 min',  badge:'b-quiz',  bl:'quiz',    xp:90,  file:'module-17.html' },
+      { n:18, title:'RPG combat game',             time:'2 hrs',   badge:'b-game',  bl:'game',    xp:200, file:'module-18.html' },
     ]},
     { id: 4, name: 'Building real things', cls: 'ph4', numCls: 'num-ph4', modules: [
-      { n:18, title:'Algorithms & problem solving', time:'65 min', badge:'b-quiz', bl:'quiz',   xp:100, file:'module-18.html' },
-      { n:19, title:'Data structures',           time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:100, file:'module-19.html' },
-      { n:20, title:'Intro to Git',              time:'55 min',  badge:'b-setup', bl:'setup',   xp:80,  file:'module-20.html' },
-      { n:21, title:'External libraries',        time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:100, file:'module-21.html' },
-      { n:22, title:'Capstone game project',     time:'3–4 hrs', badge:'b-game',  bl:'game',    xp:300, file:'module-22.html' },
+      { n:19, title:'Algorithms & problem solving',time:'65 min',  badge:'b-quiz',  bl:'quiz',    xp:100, file:'module-19.html' },
+      { n:20, title:'Data structures',             time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:100, file:'module-20.html' },
+      { n:21, title:'Intro to Git',               time:'55 min',  badge:'b-setup', bl:'setup',   xp:80,  file:'module-21.html' },
+      { n:22, title:'External libraries',          time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:100, file:'module-22.html' },
+      { n:23, title:'Capstone game project',       time:'3–4 hrs', badge:'b-game',  bl:'game',    xp:300, file:'module-23.html' },
     ]},
     { id: 5, name: 'Foundations complete', cls: 'ph5', numCls: 'num-ph5', modules: [
-      { n:23, title:'What you\'ve learned',      time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:100, file:'module-23.html' },
-      { n:24, title:'Where to go next',          time:'45 min',  badge:'b-road',  bl:'roadmap', xp:100, file:'module-24.html' },
+      { n:24, title:'What you\'ve learned',        time:'60 min',  badge:'b-quiz',  bl:'quiz',    xp:100, file:'module-24.html' },
+      { n:25, title:'Where to go next',            time:'45 min',  badge:'b-road',  bl:'roadmap', xp:100, file:'module-25.html' },
     ]},
   ];
 
@@ -630,7 +631,7 @@
     // Clear all namespaced module keys + course hub key for current user
     ['course','m1','m2','m3','m4','m5','m6','m7','m8','m9','m10',
      'm11','m12','m13','m14','m15','m16','m17','m18','m19','m20',
-     'm21','m22','m23','m24'].forEach(k => localStorage.removeItem(key(k)));
+     'm21','m22','m23','m24','m25'].forEach(k => localStorage.removeItem(key(k)));
     closeConfirm();
     render();
   }
@@ -642,7 +643,7 @@
     const data = {};
     ['course','m1','m2','m3','m4','m5','m6','m7','m8','m9','m10',
      'm11','m12','m13','m14','m15','m16','m17','m18','m19','m20',
-     'm21','m22','m23','m24'].forEach(k => {
+     'm21','m22','m23','m24','m25'].forEach(k => {
       const v = localStorage.getItem(key(k));
       if (v) data[k] = JSON.parse(v);
     });
