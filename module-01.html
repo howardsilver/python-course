@@ -323,7 +323,7 @@
   <!-- HEADER -->
   <div class="module-header">
     <div class="module-eyebrow">
-      <span class="eyebrow-pill pill-num">Module 1 of 24</span>
+      <span class="eyebrow-pill pill-num">Module 1 of 25</span>
       <span class="eyebrow-pill pill-time">~45 min</span>
       <span class="eyebrow-pill pill-type">Setup</span>
       <span class="eyebrow-pill pill-win">Windows 11</span>
@@ -335,7 +335,7 @@
   <!-- PROGRESS -->
   <div class="progress-section">
     <div class="progress-row">
-      <span id="prog-label">0 of 7 steps complete</span>
+      <span id="prog-label">0 of 4 steps complete</span>
       <span id="prog-pct">0%</span>
     </div>
     <div class="progress-bar-bg">
@@ -457,7 +457,7 @@
             <span class="step-hint" onclick="event.stopPropagation(); showHint(4)">Why VS Code and not Notepad?</span>
           </div>
           <div class="hint-box" id="hint-4" style="display:none; margin-top:10px; font-size:13px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:12px 14px; line-height:1.6;">
-            Notepad is a basic text editor. VS Code is a code editor — it highlights your code in colour so you can read it, underlines mistakes as you type, autocompletes your code, and has a built-in terminal. It turns a wall of text into something you can navigate.
+            Notepad is a basic text editor. VS Code is a code editor — it highlights your code in color so you can read it, underlines mistakes as you type, autocompletes your code, and has a built-in terminal. It turns a wall of text into something you can navigate.
           </div>
         </div>
       </div>
@@ -470,13 +470,13 @@
         </div>
         <div class="step-body">
           <div class="step-title">Install the Python extension in VS Code</div>
-          <div class="step-desc">Open VS Code. Click the <strong style="color:var(--text)">Extensions icon</strong> in the left sidebar (four squares). Search <strong style="color:var(--text)">"Python"</strong> and install the one made by Microsoft (it has millions of downloads). This gives VS Code Python superpowers: colour highlighting, error detection, and a run button.</div>
+          <div class="step-desc">Open VS Code. Click the <strong style="color:var(--text)">Extensions icon</strong> in the left sidebar (four squares). Search <strong style="color:var(--text)">"Python"</strong> and install the one made by Microsoft (it has millions of downloads). This gives VS Code Python superpowers: color highlighting, error detection, and a run button.</div>
           <div class="step-meta">
             <span class="step-time">~5 min</span>
             <span class="step-hint" onclick="event.stopPropagation(); showHint(5)">What does this extension actually do?</span>
           </div>
           <div class="hint-box" id="hint-5" style="display:none; margin-top:10px; font-size:13px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:12px 14px; line-height:1.6;">
-            Without the extension, VS Code treats Python files like plain text. With it: keywords light up in colour, typos get underlined in red as you type, you get autocomplete suggestions, and you can run your program by pressing the green play button — no terminal needed.
+            Without the extension, VS Code treats Python files like plain text. With it: keywords light up in color, typos get underlined in red as you type, you get autocomplete suggestions, and you can run your program by pressing the green play button — no terminal needed.
           </div>
         </div>
       </div>
@@ -489,7 +489,7 @@
         </div>
         <div class="step-body">
           <div class="step-title">Write and run your very first program</div>
-          <div class="step-desc">In VS Code: <strong style="color:var(--text)">File → New File</strong>. Save it as <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#c3e88d;padding:1px 5px;border-radius:4px">hello.py</code> inside a new folder called <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#c3e88d;padding:1px 5px;border-radius:4px">python-course</code> on your desktop. Type the code below exactly. Press the <strong style="color:var(--teal)">▶ play button</strong> in the top right corner. If you see your message printed in the terminal below — you're a programmer.</div>
+          <div class="step-desc">In VS Code: <strong style="color:var(--text)">File → New File</strong>. Save it as <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#c3e88d;padding:1px 5px;border-radius:4px">hello.py</code> inside a new folder called <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#c3e88d;padding:1px 5px;border-radius:4px">python-course</code> on your desktop. Type the code below exactly. Press the <strong style="color:var(--teal)">▶ play button</strong> in the top right corner. If you see your message printed in the terminal below — you're a programr.</div>
           <div class="code-block">
             <span class="cmt"># My first Python program</span><br>
             <span class="fn">print</span>(<span class="str">"Hello! My coding journey starts now."</span>)<br>
@@ -559,23 +559,22 @@
   <!-- NAV -->
   <div class="nav-btns">
     <a href="module-02.html" class="btn btn-primary">Next: Module 2 — Intro to VS Code →</a>
-    <button class="btn" onclick="showBonusChallenge()">Bonus challenge</button>
   </div>
 
   <!-- BONUS CHALLENGE -->
   <div id="bonus" style="display:none; margin-top:20px;">
     <div class="section-label">Bonus challenge</div>
     <div class="quiz-card">
-      <div class="quiz-q">Modify your hello.py program to print 5 lines — include your name, your favourite game, and what you want to build with Python one day. Run it and make sure all 5 lines appear in the terminal.</div>
+      <div class="quiz-q">Modify your hello.py program to print 5 lines — include your name, your favorite game, and what you want to build with Python one day. Run it and make sure all 5 lines appear in the terminal.</div>
       <div style="margin-top:12px;">
         <div class="code-block">
           <span class="fn">print</span>(<span class="str">"Name: ???"</span>)<br>
-          <span class="fn">print</span>(<span class="str">"Favourite game: ???"</span>)<br>
+          <span class="fn">print</span>(<span class="str">"Favorite game: ???"</span>)<br>
           <span class="fn">print</span>(<span class="str">"I want to build: ???"</span>)<br>
           <span class="fn">print</span>(<span class="str">"Languages I know so far: Python"</span>)<br>
           <span class="fn">print</span>(<span class="str">"Day 1 done."</span>)
         </div>
-        <button class="copy-btn" onclick="copyCode('print(\"Name: ???\")\nprint(\"Favourite game: ???\")\nprint(\"I want to build: ???\")\nprint(\"Languages I know so far: Python\")\nprint(\"Day 1 done.\")', this)">Copy starter code</button>
+        <button class="copy-btn" onclick="copyCode('print(\"Name: ???\")\nprint(\"Favorite game: ???\")\nprint(\"I want to build: ???\")\nprint(\"Languages I know so far: Python\")\nprint(\"Day 1 done.\")', this)">Copy starter code</button>
       </div>
     </div>
   </div>
@@ -594,7 +593,7 @@
     if (el) el.textContent = currentUser;
   });
 
-  const TOTAL_STEPS = 7;
+  const TOTAL_STEPS = 4;
   const TOTAL_QUIZ  = 3;
   const doneSteps   = new Set();
   const doneQuiz    = {};
@@ -604,7 +603,7 @@
   const feedbackOk = [
     "Correct! Without PATH, the terminal searches for Python and can't find it — so all python commands fail with a confusing error.",
     "Correct! print() is Python's way of outputting text. Whatever you put in the parentheses gets displayed in the terminal.",
-    "Correct! Every Python file ends in .py — that's how VS Code and your computer recognise it as Python code."
+    "Correct! Every Python file ends in .py — that's how VS Code and your computer recognize it as Python code."
   ];
   const feedbackNo = [
     "Not quite. The PATH issue means the terminal can't locate Python at all — nothing runs until it's fixed.",

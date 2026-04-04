@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 3 — Your First Python Program · Python Foundations</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+  :root {
+    --bg:#0f1117;--bg2:#181c27;--bg3:#1e2333;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+    --purple:#7c6ff7;--purple-lt:#a99df9;--purple-bg:rgba(124,111,247,0.12);
+    --teal:#34d399;--teal-bg:rgba(52,211,153,0.10);
+    --amber:#fbbf24;--amber-bg:rgba(251,191,36,0.10);
+    --red:#f87171;--green:#a6e3a1;
+    --text:#e2e4ed;--text2:#8b8fa8;--text3:#555974;
+    --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+    --radius:10px;--radius-lg:16px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;}
+  nav{display:flex;align-items:center;gap:12px;padding:14px 28px;border-bottom:1px solid var(--border);}
+  .nav-back{display:flex;align-items:center;gap:6px;color:var(--text2);font-size:13px;cursor:pointer;background:none;border:none;font-family:var(--sans);transition:color .2s;}
+  .nav-back:hover{color:var(--text);}
+  .nav-back svg{width:14px;height:14px;}
+  .nav-sep{color:var(--text3);font-size:13px;}
+  .nav-title{font-size:13px;font-weight:500;color:var(--text);}
+  .nav-phase{font-size:11px;font-weight:500;background:var(--purple-bg);color:var(--purple-lt);padding:3px 10px;border-radius:20px;border:1px solid rgba(124,111,247,0.2);}
+  .nav-user{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;color:var(--text2);}
+  .nav-logout{font-family:var(--sans);font-size:11px;font-weight:500;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:3px 10px;color:var(--text3);cursor:pointer;}
+  .nav-logout:hover{color:var(--text);}
+  .page{max-width:780px;margin:0 auto;padding:40px 28px 80px;}
+  .module-header{margin-bottom:36px;}
+  .module-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+  .eyebrow-pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;border:1px solid transparent;}
+  .pill-num{background:var(--purple-bg);color:var(--purple-lt);border-color:rgba(124,111,247,0.2);}
+  .pill-time{background:var(--amber-bg);color:var(--amber);border-color:rgba(251,191,36,0.2);}
+  .pill-type{background:rgba(52,211,153,0.1);color:var(--teal);border-color:rgba(52,211,153,0.2);}
+  h1{font-size:28px;font-weight:600;color:#fff;line-height:1.2;margin-bottom:10px;}
+  .module-desc{font-size:15px;color:var(--text2);line-height:1.65;max-width:600px;}
+  .progress-section{margin-bottom:32px;}
+  .progress-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:8px;}
+  .progress-bar-bg{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:var(--purple);border-radius:3px;transition:width .4s ease;}
+  .section-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;margin-top:36px;}
+  .section-label:first-child{margin-top:0;}
+  .objectives{display:flex;flex-direction:column;gap:8px;}
+  .objective{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text2);}
+  .obj-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:7px;}
+  hr{border:none;border-top:1px solid var(--border);margin:32px 0;}
+
+  /* Exercise cards */
+  .exercise{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:14px;}
+  .exercise-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .exercise-num{width:28px;height:28px;border-radius:50%;background:var(--purple-bg);border:1px solid rgba(124,111,247,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--purple-lt);flex-shrink:0;}
+  .exercise-title{font-size:15px;font-weight:500;color:#fff;}
+  .exercise-badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;background:var(--teal-bg);color:var(--teal);border:1px solid rgba(52,211,153,0.2);margin-left:auto;}
+  .exercise-desc{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:14px;}
+
+  /* Editor */
+  .editor-card{background:#0a0d14;border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden;}
+  .editor-topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.06);background:#111420;}
+  .editor-filename{font-family:var(--mono);font-size:12px;color:var(--text3);}
+  .editor-actions{display:flex;gap:8px;align-items:center;}
+  .btn-hint-sm{font-size:11px;color:var(--text3);background:none;border:1px solid var(--border2);border-radius:6px;padding:3px 9px;cursor:pointer;font-family:var(--sans);transition:color .15s;}
+  .btn-hint-sm:hover{color:var(--text2);}
+  .btn-run{font-size:12px;font-weight:500;color:#fff;background:#534AB7;border:none;border-radius:6px;padding:4px 14px;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:5px;transition:background .15s;}
+  .btn-run:hover{background:#3C3489;}
+  .run-icon{width:0;height:0;border-style:solid;border-width:4px 0 4px 7px;border-color:transparent transparent transparent #fff;display:inline-block;}
+  .editor-body{display:flex;}
+  .line-nums{padding:12px 10px 12px 14px;font-family:var(--mono);font-size:13px;line-height:1.75;color:var(--text3);user-select:none;text-align:right;background:#0a0d14;min-width:36px;}
+  .code-area{flex:1;padding:12px 14px;font-family:var(--mono);font-size:13px;line-height:1.75;color:var(--text);background:transparent;border:none;outline:none;resize:none;width:100%;}
+  .output-area{border-top:1px solid rgba(255,255,255,0.06);display:none;}
+  .output-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 14px;background:#111420;border-bottom:1px solid rgba(255,255,255,0.06);}
+  .output-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;}
+  .btn-clear{font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer;font-family:var(--sans);}
+  .btn-clear:hover{color:var(--text2);}
+  .output-lines{padding:10px 14px;font-family:var(--mono);font-size:13px;line-height:1.75;min-height:44px;}
+  .out-line{color:var(--text);}
+  .out-err{color:var(--red);}
+  .out-hint{color:var(--text3);font-style:italic;font-size:12px;}
+  .hint-inline{display:none;background:#EEEDFE;border:1px solid #AFA9EC;border-radius:var(--radius);padding:10px 14px;font-size:12px;color:#3C3489;line-height:1.6;margin-top:8px;}
+  .check-row{display:none;align-items:center;gap:10px;margin-top:10px;padding:10px 14px;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius);}
+  .check-row.show{display:flex;}
+  .check-txt{font-size:13px;color:var(--teal);}
+  .check-icon{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .check-icon svg{width:10px;height:10px;}
+
+  /* Context box */
+  .context-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 16px;font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:14px;}
+  .context-box strong{color:var(--text);font-weight:500;}
+
+  /* Quiz */
+  .quiz{display:flex;flex-direction:column;gap:20px;}
+  .quiz-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;}
+  .quiz-q{font-size:14px;font-weight:500;color:var(--text);margin-bottom:14px;line-height:1.5;}
+  .quiz-q code{font-family:var(--mono);font-size:12px;background:#0a0d14;color:var(--purple-lt);padding:1px 6px;border-radius:4px;}
+  .quiz-opts{display:flex;flex-direction:column;gap:7px;}
+  .quiz-opt{text-align:left;font-family:var(--sans);font-size:13px;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;cursor:pointer;transition:border-color .15s,background .15s;line-height:1.4;}
+  .quiz-opt:hover:not([disabled]){border-color:var(--border2);color:var(--text);}
+  .quiz-opt.correct{background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.4);color:var(--teal);}
+  .quiz-opt.wrong{background:rgba(248,113,113,0.08);border-color:rgba(248,113,113,0.3);color:var(--red);}
+  .quiz-opt[disabled]{cursor:default;}
+  .quiz-feedback{font-size:12px;margin-top:10px;padding:10px 14px;border-radius:var(--radius);line-height:1.5;display:none;}
+  .quiz-feedback.show{display:block;}
+  .quiz-feedback.ok{background:rgba(52,211,153,0.08);color:#6ee7b7;border:1px solid rgba(52,211,153,0.2);}
+  .quiz-feedback.no{background:rgba(248,113,113,0.08);color:#fca5a5;border:1px solid rgba(248,113,113,0.2);}
+  .reward{background:var(--purple-bg);border:1px solid rgba(124,111,247,0.25);border-radius:var(--radius-lg);padding:18px 22px;display:none;align-items:center;gap:16px;margin-top:28px;}
+  .reward.show{display:flex;animation:pop .35s ease;}
+  @keyframes pop{0%{transform:scale(.95);opacity:0}100%{transform:scale(1);opacity:1}}
+  .xp-badge{background:var(--purple);color:#fff;font-size:13px;font-weight:600;padding:6px 14px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+  .reward-text{font-size:14px;color:var(--purple-lt);line-height:1.5;}
+  .reward-text strong{color:#fff;}
+  .nav-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px;}
+  .btn{font-family:var(--sans);font-size:13px;font-weight:500;padding:9px 18px;border-radius:var(--radius);cursor:pointer;border:1px solid var(--border2);background:var(--bg2);color:var(--text2);transition:background .15s,color .15s;text-decoration:none;display:inline-block;}
+  .btn:hover{background:var(--bg3);color:var(--text);}
+  .btn-primary{background:var(--purple);color:#fff;border-color:var(--purple);}
+  .btn-primary:hover{background:#6c5fe6;border-color:#6c5fe6;color:#fff;}
+  @media(max-width:500px){.page{padding:24px 16px 60px;}h1{font-size:22px;}nav{padding:12px 16px;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <button class="nav-back" onclick="window.location.href='index.html'">
+    <svg viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Course hub
+  </button>
+  <span class="nav-sep">/</span>
+  <span class="nav-title">Module 3</span>
+  <span class="nav-phase">Phase 1 — Setup &amp; first steps</span>
+  <div class="nav-user">
+    <span id="nav-user-name"></span>
+    <button class="nav-logout" onclick="logout()">Sign out</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="module-header">
+    <div class="module-eyebrow">
+      <span class="eyebrow-pill pill-num">Module 3 of 25</span>
+      <span class="eyebrow-pill pill-time">~30 min</span>
+      <span class="eyebrow-pill pill-type">Project</span>
+    </div>
+    <h1>Your first Python program</h1>
+    <p class="module-desc">Everything is installed. VS Code is configured. Now you write real code — in VS Code, for the first time. Two exercises, one concept: the <code style="font-family:var(--mono);font-size:14px;color:var(--purple-lt);">print()</code> function. No new syntax. Pure confidence building.</p>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-row">
+      <span id="prog-label">0 of 2 exercises complete</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="section-label">What you'll do</div>
+  <div class="objectives">
+    <div class="objective"><div class="obj-dot"></div><span>Write Hello, World — the traditional first program every programmer writes</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Build a personal stats card that prints your own information</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Practice the core development loop: write → save → run → read output → adjust</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Get comfortable making mistakes and fixing them — that's how coding works</span></div>
+  </div>
+
+  <div class="context-box" style="margin-top:20px;">
+    <strong>How this module works:</strong> These exercises run in a preview editor here in the browser so you can experiment freely. But you should also type each one into VS Code and run it there — that's where all your real coding will happen. The browser editor is just to practice; VS Code is where you work.
+  </div>
+
+  <hr>
+
+  <div class="section-label">Exercises</div>
+
+  <!-- EXERCISE 1: Hello World -->
+  <div class="exercise" id="ex-0">
+    <div class="exercise-header">
+      <div class="exercise-num">1</div>
+      <div class="exercise-title">Hello, World</div>
+      <span class="exercise-badge">Classic first program</span>
+    </div>
+    <div class="exercise-desc">
+      Every programmer's very first program is Hello, World. It is a tradition going back to 1974. The code below already works — press <strong style="color:var(--text)">Run</strong> to see it execute. Then try changing the text inside the quotes to anything you want and run it again.<br><br>
+      The <code style="font-family:var(--mono);font-size:12px;color:var(--purple-lt);">print()</code> function is your program's way of talking back to you. Whatever you put inside the parentheses — wrapped in quotes — appears as output. That's it. Simple, but fundamental.
+    </div>
+    <div class="editor-card">
+      <div class="editor-topbar">
+        <span class="editor-filename">hello.py</span>
+        <div class="editor-actions">
+          <button class="btn-hint-sm" onclick="toggleHintEx(0)">What are the quotes for?</button>
+          <button class="btn-run" onclick="runEx(0)"><span class="run-icon"></span> Run</button>
+        </div>
+      </div>
+      <div class="editor-body">
+        <div class="line-nums" id="ln-0">1</div>
+        <textarea class="code-area" id="code-0" spellcheck="false" autocorrect="off" autocapitalize="off" rows="1" oninput="updateLN(0)">print("Hello, World!")</textarea>
+      </div>
+      <div class="output-area" id="out-0">
+        <div class="output-bar"><span class="output-label">Output</span><button class="btn-clear" onclick="clearEx(0)">Clear</button></div>
+        <div class="output-lines" id="outlines-0"></div>
+      </div>
+    </div>
+    <div class="hint-inline" id="hint-ex-0">The quotes tell Python "this is text, not a command." Without quotes, Python would try to find a variable called <code style="font-family:var(--mono);font-size:11px;">Hello</code> and fail. Text wrapped in quotes is called a <strong>string</strong> — you'll learn much more about strings in Module 5.</div>
+    <div class="check-row" id="check-0">
+      <div class="check-icon"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="check-txt">It ran! Now type this in VS Code too — create a file called hello.py, paste the same code, save it with Ctrl+S, and press the play button.</span>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:8px;"><strong style="color:var(--text)">Now try in VS Code:</strong></div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+        1. Open VS Code with your python-course folder<br>
+        2. Create a new file: hover over the folder name in the Explorer, click the New File icon<br>
+        3. Name it <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#a6e3a1;padding:1px 5px;border-radius:4px">hello.py</code> and press Enter<br>
+        4. Type <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#a6e3a1;padding:1px 5px;border-radius:4px">print("Hello, World!")</code><br>
+        5. Press <strong style="color:var(--text)">Ctrl+S</strong> to save<br>
+        6. Press the <strong style="color:var(--text)">▶ play button</strong> — your output appears in the terminal below<br>
+        7. Come back here and mark this exercise complete
+      </div>
+    </div>
+
+    <button class="btn" style="margin-top:14px;width:100%;" onclick="markExDone(0)" id="done-btn-0">Mark as complete — I ran this in VS Code too</button>
+  </div>
+
+  <!-- EXERCISE 2: Personal Stats Card -->
+  <div class="exercise" id="ex-1">
+    <div class="exercise-header">
+      <div class="exercise-num">2</div>
+      <div class="exercise-title">Personal stats card</div>
+      <span class="exercise-badge">Make it yours</span>
+    </div>
+    <div class="exercise-desc">
+      Replace the placeholder text with your own information. You can call <code style="font-family:var(--mono);font-size:12px;color:var(--purple-lt);">print()</code> as many times as you want — each call produces one line of output. Change every line so it reflects you, then run it.<br><br>
+      After it runs here, type the whole thing into a new file in VS Code called <code style="font-family:var(--mono);font-size:12px;color:var(--purple-lt);">stats.py</code> and run it there too.
+    </div>
+    <div class="editor-card">
+      <div class="editor-topbar">
+        <span class="editor-filename">stats.py</span>
+        <div class="editor-actions">
+          <button class="btn-hint-sm" onclick="toggleHintEx(1)">Can I add more lines?</button>
+          <button class="btn-run" onclick="runEx(1)"><span class="run-icon"></span> Run</button>
+        </div>
+      </div>
+      <div class="editor-body">
+        <div class="line-nums" id="ln-1">1<br>2<br>3<br>4<br>5<br>6</div>
+        <textarea class="code-area" id="code-1" spellcheck="false" autocorrect="off" autocapitalize="off" rows="6" oninput="updateLN(1)">print("Name: Your name here")
+print("Age: 00")
+print("Favorite game: ???")
+print("Goal: I want to build ???")
+print("Languages I know: Python (learning!)")
+print("Day 1 of coding: COMPLETE")</textarea>
+      </div>
+      <div class="output-area" id="out-1">
+        <div class="output-bar"><span class="output-label">Output</span><button class="btn-clear" onclick="clearEx(1)">Clear</button></div>
+        <div class="output-lines" id="outlines-1"></div>
+      </div>
+    </div>
+    <div class="hint-inline" id="hint-ex-1">Absolutely — add as many print() lines as you want. Each one produces a new line of output. You can also print a blank line with just <code style="font-family:var(--mono);font-size:11px;">print()</code> — no quotes, nothing inside — which gives you an empty line for spacing.</div>
+    <div class="check-row" id="check-1">
+      <div class="check-icon"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="check-txt">Looking good! Now create stats.py in VS Code, fill it in with your real information, save, and run it there.</span>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:8px;"><strong style="color:var(--text)">Now try in VS Code:</strong></div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+        1. Create a new file in VS Code called <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#a6e3a1;padding:1px 5px;border-radius:4px">stats.py</code><br>
+        2. Type your personalized version — use your real name, age, and goals<br>
+        3. Press <strong style="color:var(--text)">Ctrl+S</strong> to save<br>
+        4. Press the <strong style="color:var(--text)">▶ play button</strong> and see your stats printed out<br>
+        5. Try tweaking something and running it again — notice how fast the cycle is
+      </div>
+    </div>
+
+    <button class="btn" style="margin-top:14px;width:100%;" onclick="markExDone(1)" id="done-btn-1">Mark as complete — I ran this in VS Code too</button>
+  </div>
+
+  <hr>
+
+  <div class="section-label">Quick quiz — 3 questions</div>
+  <div class="quiz" id="quiz">
+
+    <div class="quiz-card" id="qc-0">
+      <div class="quiz-q">1. What does <code>print("Hello")</code> do?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer(0,this,false)">Saves the word Hello to a file called Hello</button>
+        <button class="quiz-opt" onclick="answer(0,this,true)">Displays the word Hello in the terminal output</button>
+        <button class="quiz-opt" onclick="answer(0,this,false)">Creates a variable named Hello</button>
+        <button class="quiz-opt" onclick="answer(0,this,false)">Searches the internet for Hello</button>
+      </div>
+      <div class="quiz-feedback" id="qf-0"></div>
+    </div>
+
+    <div class="quiz-card" id="qc-1">
+      <div class="quiz-q">2. You call <code>print()</code> five times. How many lines of output appear?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer(1,this,false)">One line — print() always outputs to one line</button>
+        <button class="quiz-opt" onclick="answer(1,this,false)">It depends on the length of the text</button>
+        <button class="quiz-opt" onclick="answer(1,this,true)">Five lines — each print() call produces one line</button>
+        <button class="quiz-opt" onclick="answer(1,this,false)">Zero — you need to save first</button>
+      </div>
+      <div class="quiz-feedback" id="qf-1"></div>
+    </div>
+
+    <div class="quiz-card" id="qc-2">
+      <div class="quiz-q">3. What is the correct order of steps when working in VS Code?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer(2,this,false)">Run → Write → Save</button>
+        <button class="quiz-opt" onclick="answer(2,this,false)">Save → Run → Write</button>
+        <button class="quiz-opt" onclick="answer(2,this,true)">Write → Save (Ctrl+S) → Run</button>
+        <button class="quiz-opt" onclick="answer(2,this,false)">Write → Run → Save</button>
+      </div>
+      <div class="quiz-feedback" id="qf-2"></div>
+    </div>
+
+  </div>
+
+  <div class="reward" id="reward">
+    <div class="xp-badge">+75 XP</div>
+    <div class="reward-text"><strong>Module 3 complete!</strong> You've written and run your first real Python programs in VS Code. The development loop — write, save, run — is now in your muscle memory. From here, every module builds on this foundation.</div>
+  </div>
+
+  <div class="nav-btns">
+    <a href="module-04.html" class="btn btn-primary">Next: Module 4 — How computers think →</a>
+    <a href="module-02.html" class="btn">← Back to Module 2</a>
+  </div>
+
+</div>
+
+<script>
+  const STORAGE_KEY = 'pf_user';
+  const currentUser = localStorage.getItem(STORAGE_KEY);
+  if (!currentUser) window.location.replace('login.html');
+  function key(k) { return currentUser.toLowerCase() + '_' + k; }
+  function logout() { localStorage.removeItem(STORAGE_KEY); window.location.replace('login.html'); }
+  document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById('nav-user-name');
+    if (el) el.textContent = currentUser;
+  });
+
+  const TOTAL_EX   = 2;
+  const TOTAL_QUIZ = 3;
+  const doneEx   = new Set();
+  const doneQuiz = {};
+
+  const feedbackOk = [
+    "Correct! print() displays whatever text you put inside the quotes directly in the terminal.",
+    "Correct! Each print() call outputs exactly one line. Five calls = five lines.",
+    "Correct! Always write first, save with Ctrl+S, then run. Running an unsaved file runs the old version."
+  ];
+  const feedbackNo = [
+    "Not quite. print() displays text in the terminal — it doesn't save files or search the internet.",
+    "Not quite. Each print() call produces exactly one line of output, regardless of text length.",
+    "Not quite. The correct order is write → save → run. Skipping the save step means you run old code."
+  ];
+
+  function save() {
+    try {
+      localStorage.setItem(key('m3'), JSON.stringify({
+        steps: [...doneEx], totalSteps: TOTAL_EX, quiz: doneQuiz
+      }));
+    } catch(e) {}
+  }
+
+  function updateProgress() {
+    const n = doneEx.size;
+    const pct = Math.round(n / TOTAL_EX * 100);
+    document.getElementById('prog-label').textContent = n + ' of ' + TOTAL_EX + ' exercises complete';
+    document.getElementById('prog-pct').textContent   = pct + '%';
+    document.getElementById('prog-fill').style.width  = pct + '%';
+  }
+
+  function markExDone(i) {
+    doneEx.add(i);
+    document.getElementById('done-btn-' + i).textContent = 'Done!';
+    document.getElementById('done-btn-' + i).disabled = true;
+    document.getElementById('done-btn-' + i).style.opacity = '.5';
+    updateProgress(); save(); checkReward();
+  }
+
+  function updateLN(i) {
+    const lines = document.getElementById('code-' + i).value.split('\n').length;
+    document.getElementById('ln-' + i).innerHTML = Array.from({length:lines},(_,j)=>j+1).join('<br>');
+  }
+
+  function runEx(i) {
+    const code = document.getElementById('code-' + i).value;
+    const outArea = document.getElementById('out-' + i);
+    const outLines = document.getElementById('outlines-' + i);
+    outArea.style.display = 'block';
+    outLines.innerHTML = '';
+    let hasOutput = false, hasError = false;
+    code.split('\n').forEach(line => {
+      const t = line.trim();
+      if (!t || t.startsWith('#')) return;
+      const m1 = t.match(/^print\s*\(\s*["'](.*?)["']\s*\)$/);
+      const m2 = t.match(/^print\s*\(\s*\)$/);
+      if (m1) {
+        const d = document.createElement('div');
+        d.className = 'out-line'; d.textContent = m1[1];
+        outLines.appendChild(d); hasOutput = true;
+      } else if (m2) {
+        outLines.appendChild(document.createElement('br')); hasOutput = true;
+      } else if (t.startsWith('print')) {
+        const d = document.createElement('div');
+        d.className = 'out-err'; d.textContent = 'SyntaxError: check your quotes and parentheses.';
+        outLines.appendChild(d); hasError = true;
+      } else {
+        const d = document.createElement('div');
+        d.className = 'out-err';
+        d.textContent = 'NameError: "' + t.split('(')[0].split(' ')[0] + '" is not defined yet.';
+        outLines.appendChild(d); hasError = true;
+      }
+    });
+    if (!hasOutput && !hasError) {
+      const d = document.createElement('div');
+      d.className = 'out-hint'; d.textContent = '(no output — add a print() call)';
+      outLines.appendChild(d);
+    }
+    if (hasOutput && !hasError) {
+      document.getElementById('check-' + i).classList.add('show');
+    }
+  }
+
+  function clearEx(i) {
+    document.getElementById('out-' + i).style.display = 'none';
+    document.getElementById('check-' + i).classList.remove('show');
+  }
+
+  function toggleHintEx(i) {
+    const h = document.getElementById('hint-ex-' + i);
+    h.style.display = h.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function answer(qi, btn, correct) {
+    if (doneQuiz[qi] !== undefined) return;
+    const card = document.getElementById('qc-' + qi);
+    const opts = card.querySelectorAll('.quiz-opt');
+    const selectedIdx = Array.from(opts).indexOf(btn);
+    opts.forEach(b => {
+      b.disabled = true;
+      if (b.getAttribute('onclick').includes('true')) b.classList.add('correct');
+    });
+    if (!correct) btn.classList.add('wrong');
+    const fb = document.getElementById('qf-' + qi);
+    fb.textContent = correct ? feedbackOk[qi] : feedbackNo[qi];
+    fb.className   = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
+    doneQuiz[qi]   = { correct, selected: selectedIdx };
+    save(); checkReward();
+  }
+
+  function checkReward() {
+    if (doneEx.size === TOTAL_EX && Object.keys(doneQuiz).length === TOTAL_QUIZ) {
+      document.getElementById('reward').classList.add('show');
+      try {
+        const hub = JSON.parse(localStorage.getItem(key('course')) || '{}');
+        hub.done = hub.done || [];
+        if (!hub.done.includes(3)) hub.done.push(3);
+        localStorage.setItem(key('course'), JSON.stringify(hub));
+      } catch(e) {}
+    }
+  }
+
+  function init() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(key('m3')) || '{}');
+      if (saved.steps) saved.steps.forEach(i => doneEx.add(i));
+      if (saved.quiz)  Object.assign(doneQuiz, saved.quiz);
+    } catch(e) {}
+
+    doneEx.forEach(i => {
+      const btn = document.getElementById('done-btn-' + i);
+      if (btn) { btn.textContent = 'Done!'; btn.disabled = true; btn.style.opacity = '.5'; }
+    });
+
+    Object.entries(doneQuiz).forEach(([qi, val]) => {
+      const { correct, selected } = val;
+      const card = document.getElementById('qc-' + qi);
+      if (!card) return;
+      const opts = card.querySelectorAll('.quiz-opt');
+      opts.forEach((b, idx) => {
+        b.disabled = true;
+        const isCorrect = b.getAttribute('onclick').includes('true');
+        if (idx === selected) b.classList.add(correct ? 'correct' : 'wrong');
+        if (!correct && isCorrect) b.classList.add('correct');
+      });
+      const fb = document.getElementById('qf-' + qi);
+      if (fb) {
+        fb.textContent = correct ? feedbackOk[qi] : feedbackNo[qi];
+        fb.className   = 'quiz-feedback show ' + (correct ? 'ok' : 'no');
+      }
+    });
+
+    updateProgress(); checkReward();
+  }
+
+  init();
+</script>
+</body>
+</html>

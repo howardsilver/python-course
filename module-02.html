@@ -225,12 +225,12 @@
 
   <div class="section-label">What you'll learn</div>
   <div class="objectives">
-    <div class="objective"><div class="obj-dot"></div><span>Recognise every part of the VS Code interface and know what it's for</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Recognize every part of the VS Code interface and know what it's for</span></div>
     <div class="objective"><div class="obj-dot"></div><span>Open a project folder the right way — how professionals do it</span></div>
     <div class="objective"><div class="obj-dot"></div><span>Create, edit, and save Python files in VS Code</span></div>
     <div class="objective"><div class="obj-dot"></div><span>Run a Python file using the play button and read the output</span></div>
     <div class="objective"><div class="obj-dot"></div><span>Use the built-in terminal without fear</span></div>
-    <div class="objective"><div class="obj-dot"></div><span>Personalise VS Code with your own colour theme</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Personalize VS Code with your own color theme</span></div>
   </div>
 
   <hr>
@@ -244,7 +244,7 @@
         <div class="step-check"><svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="step-body">
           <div class="step-title">Meet the VS Code interface</div>
-          <div class="step-desc">Open VS Code. Don't worry about anything on screen yet — just look. The diagram below shows you what every part is called and what it does. Most of it you'll never need to touch as a beginner.</div>
+          <div class="step-desc">Open VS Code. Don't worry about anything on screen yet — just look. The diagram below shows you what every part is called and what it does. This page auto-detects your OS — Windows is shown by default. Most of it you'll never need to touch as a beginner. This page auto-detects your operating system — Windows is shown by default. Switch tabs if you are on a Mac.</div>
 
           <div class="vscode-diagram" style="margin-top:12px;" onclick="event.stopPropagation()">
             <div class="vscode-titlebar">
@@ -304,7 +304,7 @@
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;" onclick="event.stopPropagation()">
             <div class="callout"><strong style="color:var(--blue)">Activity bar</strong> — the icons on the far left. Click the top one (Explorer) to see your files.</div>
             <div class="callout"><strong style="color:var(--blue)">Explorer panel</strong> — shows all files in your project folder. This is your file browser.</div>
-            <div class="callout"><strong style="color:var(--blue)">Editor area</strong> — the big centre area where you write code. Tabs at the top show open files.</div>
+            <div class="callout"><strong style="color:var(--blue)">Editor area</strong> — the big center area where you write code. Tabs at the top show open files.</div>
             <div class="callout"><strong style="color:var(--blue)">Terminal</strong> — a command line built right into VS Code. Python output appears here.</div>
           </div>
 
@@ -371,7 +371,7 @@
         <div class="step-check"><svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="step-body">
           <div class="step-title">Three shortcuts worth memorising now</div>
-          <div class="step-desc">These three keyboard shortcuts will save you time every single day. Practise each one right now while VS Code is open.</div>
+          <div class="step-desc">These three keyboard shortcuts will save you time every single day. Practice each one right now while VS Code is open.</div>
           <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;" onclick="event.stopPropagation()">
             <div class="callout"><strong style="color:var(--amber)">Ctrl+S</strong> — Save the current file. Do this constantly. Every time before you run.</div>
             <div class="callout"><strong style="color:var(--amber)">Ctrl+Z</strong> — Undo the last thing you typed. Works up to hundreds of steps back.</div>
@@ -387,7 +387,7 @@
       <div class="step-top">
         <div class="step-check"><svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="step-body">
-          <div class="step-title">Pick your colour theme</div>
+          <div class="step-title">Pick your color theme</div>
           <div class="step-desc">You'll stare at this editor for hundreds of hours. Make it look good to you. In VS Code: <strong style="color:var(--text)">File → Preferences → Color Theme</strong> (or press <strong style="color:var(--text)">Ctrl+K Ctrl+T</strong>). Browse through them — the arrow keys let you preview in real time. Click below to note which one you picked.</div>
 
           <div class="theme-grid" onclick="event.stopPropagation()">
@@ -512,7 +512,7 @@
   </div>
 
   <div class="nav-btns">
-    <a href="module-03.html" class="btn btn-primary">Next: Module 3 — How computers think →</a>
+    <a href="module-03.html" class="btn btn-primary">Next: Module 3 — Your first Python program →</a>
     <a href="module-01.html" class="btn">← Back to Module 1</a>
   </div>
 
@@ -615,7 +615,7 @@
     card.classList.add('picked');
     document.getElementById('theme-result').textContent =
       name === 'Something else' ? 'Nice — whatever looks good to you is the right choice.' :
-      'Good choice. ' + name + ' is a favourite among developers.';
+      'Good choice. ' + name + ' is a favorite among developers.';
   }
 
   function init() {
@@ -650,6 +650,18 @@
     updateProgress();
     checkReward();
   }
+
+  // OS tab switching
+  function switchOS(os) {
+    ['win','mac'].forEach(o => {
+      const t = document.getElementById('tab-' + o);
+      const p = document.getElementById('panel-' + o);
+      if (t) t.classList.toggle('active', o===os);
+      if (p) p.classList.toggle('show', o===os);
+    });
+  }
+  // Auto-detect OS
+  if (/mac/i.test(navigator.platform) && !/win/i.test(navigator.platform)) switchOS('mac');
 
   init();
 </script>
