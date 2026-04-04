@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Module 1 — Your dev environment · Python Foundations</title>
+<title>Module 1 — Your Dev Environment · Python Foundations</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
 
@@ -42,7 +42,6 @@
     line-height: 1.6;
   }
 
-  /* ── NAV ── */
   nav {
     display: flex;
     align-items: center;
@@ -52,28 +51,20 @@
     background: var(--bg);
   }
   .nav-back {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--text2);
-    text-decoration: none;
-    font-size: 13px;
-    transition: color .2s;
-    cursor: pointer;
-    background: none;
-    border: none;
-    font-family: var(--sans);
+    display: flex; align-items: center; gap: 6px;
+    color: var(--text2); font-size: 13px; transition: color .2s;
+    cursor: pointer; background: none; border: none; font-family: var(--sans);
   }
   .nav-back:hover { color: var(--text); }
   .nav-back svg { width: 14px; height: 14px; }
   .nav-sep { color: var(--text3); font-size: 13px; }
   .nav-title { font-size: 13px; font-weight: 500; color: var(--text); }
-  .nav-phase { margin-left: auto; font-size: 11px; font-weight: 500; background: var(--purple-bg); color: var(--purple-lt); padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(124,111,247,0.2); }
-
-  .nav-user {
-    display: flex; align-items: center; gap: 8px;
-    margin-left: auto; font-size: 12px; color: var(--text2);
+  .nav-phase {
+    font-size: 11px; font-weight: 500; background: var(--purple-bg);
+    color: var(--purple-lt); padding: 3px 10px; border-radius: 20px;
+    border: 1px solid rgba(124,111,247,0.2);
   }
+  .nav-user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text2); }
   .nav-logout {
     font-family: var(--sans); font-size: 11px; font-weight: 500;
     background: var(--bg3); border: 1px solid var(--border2);
@@ -82,203 +73,129 @@
   }
   .nav-logout:hover { color: var(--text); }
 
-  /* ── LAYOUT ── */
   .page { max-width: 780px; margin: 0 auto; padding: 40px 28px 80px; }
 
-  /* ── HEADER ── */
   .module-header { margin-bottom: 36px; }
   .module-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-  .eyebrow-pill {
-    font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px;
-    border: 1px solid transparent;
-  }
-  .pill-num    { background: var(--purple-bg); color: var(--purple-lt); border-color: rgba(124,111,247,0.2); }
-  .pill-time   { background: var(--amber-bg);  color: var(--amber);     border-color: rgba(251,191,36,0.2); }
-  .pill-type   { background: var(--teal-bg);   color: var(--teal);      border-color: rgba(52,211,153,0.2); }
-  .pill-win    { background: rgba(255,255,255,0.05); color: var(--text2); border-color: var(--border2); }
+  .eyebrow-pill { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; border: 1px solid transparent; }
+  .pill-num  { background: var(--purple-bg); color: var(--purple-lt); border-color: rgba(124,111,247,0.2); }
+  .pill-time { background: var(--amber-bg);  color: var(--amber);     border-color: rgba(251,191,36,0.2); }
+  .pill-type { background: var(--teal-bg);   color: var(--teal);      border-color: rgba(52,211,153,0.2); }
 
   h1 { font-size: 28px; font-weight: 600; color: #fff; line-height: 1.2; margin-bottom: 10px; }
   .module-desc { font-size: 15px; color: var(--text2); line-height: 1.65; max-width: 600px; }
 
-  /* ── PROGRESS BAR ── */
   .progress-section { margin-bottom: 32px; }
   .progress-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 8px; }
   .progress-bar-bg { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
   .progress-bar-fill { height: 100%; background: var(--purple); border-radius: 3px; transition: width .4s ease; }
 
-  /* ── SECTION LABELS ── */
   .section-label {
     font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
     color: var(--text3); margin-bottom: 14px; margin-top: 36px;
   }
   .section-label:first-child { margin-top: 0; }
 
-  /* ── OBJECTIVES ── */
   .objectives { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
   .objective { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text2); }
   .obj-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--purple); flex-shrink: 0; margin-top: 7px; }
 
-  /* ── STEPS ── */
   .steps { display: flex; flex-direction: column; gap: 6px; }
-
   .step {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 16px 18px;
-    cursor: pointer;
-    transition: border-color .2s, background .2s;
-    user-select: none;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 16px 18px;
+    cursor: pointer; transition: border-color .2s, background .2s; user-select: none;
   }
   .step:hover { border-color: var(--border2); background: var(--bg3); }
-  .step.done {
-    border-color: rgba(52,211,153,0.3);
-    background: rgba(52,211,153,0.05);
-  }
-
+  .step.done { border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.05); }
   .step-top { display: flex; align-items: flex-start; gap: 12px; }
-
   .step-check {
     width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
-    border: 1.5px solid var(--border2);
-    background: var(--bg3);
+    border: 1.5px solid var(--border2); background: var(--bg3);
     display: flex; align-items: center; justify-content: center;
     transition: background .2s, border-color .2s;
   }
   .step.done .step-check { background: var(--teal); border-color: var(--teal); }
   .step-check svg { width: 11px; height: 11px; opacity: 0; transition: opacity .2s; }
   .step.done .step-check svg { opacity: 1; }
-
   .step-body { flex: 1; }
   .step-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; transition: color .2s; }
   .step.done .step-title { color: var(--teal); }
   .step-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
   .step-meta { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
   .step-time { font-size: 11px; color: var(--text3); }
-
   .step-hint {
     display: inline-block; font-size: 11px; color: var(--purple-lt);
     background: var(--purple-bg); border: 1px solid rgba(124,111,247,0.15);
-    padding: 3px 9px; border-radius: 20px; cursor: pointer;
-    transition: background .15s;
-    text-decoration: none;
+    padding: 3px 9px; border-radius: 20px; cursor: pointer; transition: background .15s;
   }
   .step-hint:hover { background: rgba(124,111,247,0.2); }
-
-  /* ── CODE BLOCK ── */
-  .code-block {
-    font-family: var(--mono);
-    font-size: 13px;
-    background: #0a0d14;
-    border: 1px solid var(--border2);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    margin: 10px 0 4px;
-    line-height: 1.7;
-    cursor: default;
+  .hint-box {
+    display: none; margin-top: 10px; font-size: 13px; color: var(--text2);
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: var(--radius); padding: 12px 14px; line-height: 1.6;
   }
-  .kw  { color: #c792ea; }
+
+  .focus-box {
+    background: var(--amber-bg); border: 1px solid rgba(251,191,36,0.2);
+    border-radius: var(--radius); padding: 12px 16px; font-size: 13px;
+    color: var(--text2); margin: 10px 0; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .focus-icon { color: var(--amber); font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+  .code-block {
+    font-family: var(--mono); font-size: 13px; background: #0a0d14;
+    border: 1px solid var(--border2); border-radius: var(--radius);
+    padding: 14px 16px; margin: 10px 0 4px; line-height: 1.7; cursor: default;
+  }
   .fn  { color: #82aaff; }
-  .str { color: #c3e88d; }
   .cmt { color: #546e7a; font-style: italic; }
   .copy-btn {
     display: inline-block; font-size: 11px; color: var(--text3);
     background: var(--bg3); border: 1px solid var(--border);
     padding: 3px 9px; border-radius: 6px; cursor: pointer;
-    font-family: var(--sans); transition: color .15s, border-color .15s;
-    margin-top: 4px;
+    font-family: var(--sans); transition: color .15s, border-color .15s; margin-top: 4px;
   }
   .copy-btn:hover { color: var(--text); border-color: var(--border2); }
   .copy-btn.copied { color: var(--teal); border-color: rgba(52,211,153,0.3); }
 
-  /* ── ADHD FOCUS BOX ── */
-  .focus-box {
-    background: var(--amber-bg);
-    border: 1px solid rgba(251,191,36,0.2);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    font-size: 13px;
-    color: var(--text2);
-    margin: 10px 0;
-    display: flex; gap: 10px; align-items: flex-start;
-  }
-  .focus-icon { color: var(--amber); font-size: 15px; flex-shrink: 0; margin-top: 1px; }
-
-  /* ── DIVIDER ── */
   hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 
-  /* ── QUIZ ── */
   .quiz { display: flex; flex-direction: column; gap: 20px; }
-
-  .quiz-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 18px 20px;
-  }
-
-  .quiz-q {
-    font-size: 14px; font-weight: 500; color: var(--text);
-    margin-bottom: 14px; line-height: 1.5;
-  }
-  .quiz-q code {
-    font-family: var(--mono); font-size: 12px;
-    background: #0a0d14; color: var(--purple-lt);
-    padding: 1px 6px; border-radius: 4px;
-  }
-
+  .quiz-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; }
+  .quiz-q { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 14px; line-height: 1.5; }
+  .quiz-q code { font-family: var(--mono); font-size: 12px; background: #0a0d14; color: var(--purple-lt); padding: 1px 6px; border-radius: 4px; }
   .quiz-opts { display: flex; flex-direction: column; gap: 7px; }
   .quiz-opt {
-    text-align: left; font-family: var(--sans); font-size: 13px;
-    color: var(--text2); background: var(--bg3);
-    border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 10px 14px; cursor: pointer;
-    transition: border-color .15s, background .15s, color .15s;
-    line-height: 1.4;
+    text-align: left; font-family: var(--sans); font-size: 13px; color: var(--text2);
+    background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 10px 14px; cursor: pointer; transition: border-color .15s, background .15s, color .15s; line-height: 1.4;
   }
   .quiz-opt:hover:not([disabled]) { border-color: var(--border2); color: var(--text); }
   .quiz-opt.correct { background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.4); color: var(--teal); }
   .quiz-opt.wrong   { background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.3); color: var(--red); }
   .quiz-opt[disabled] { cursor: default; }
-
-  .quiz-feedback {
-    font-size: 12px; margin-top: 10px; padding: 10px 14px;
-    border-radius: var(--radius); line-height: 1.5;
-    display: none;
-  }
+  .quiz-feedback { font-size: 12px; margin-top: 10px; padding: 10px 14px; border-radius: var(--radius); line-height: 1.5; display: none; }
   .quiz-feedback.show { display: block; }
   .quiz-feedback.ok { background: rgba(52,211,153,0.08); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.2); }
   .quiz-feedback.no { background: rgba(248,113,113,0.08); color: #fca5a5; border: 1px solid rgba(248,113,113,0.2); }
 
-  /* ── XP REWARD ── */
   .reward {
-    background: var(--purple-bg);
-    border: 1px solid rgba(124,111,247,0.25);
-    border-radius: var(--radius-lg);
-    padding: 18px 22px;
-    display: none;
-    align-items: center;
-    gap: 16px;
-    margin-top: 28px;
+    background: var(--purple-bg); border: 1px solid rgba(124,111,247,0.25);
+    border-radius: var(--radius-lg); padding: 18px 22px;
+    display: none; align-items: center; gap: 16px; margin-top: 28px;
   }
   .reward.show { display: flex; animation: pop .35s ease; }
   @keyframes pop { 0%{transform:scale(.95);opacity:0} 100%{transform:scale(1);opacity:1} }
-  .xp-badge {
-    background: var(--purple); color: #fff;
-    font-size: 13px; font-weight: 600;
-    padding: 6px 14px; border-radius: 20px;
-    white-space: nowrap; flex-shrink: 0;
-  }
+  .xp-badge { background: var(--purple); color: #fff; font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
   .reward-text { font-size: 14px; color: var(--purple-lt); line-height: 1.5; }
   .reward-text strong { color: #fff; }
 
-  /* ── NAV BUTTONS ── */
   .nav-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
   .btn {
     font-family: var(--sans); font-size: 13px; font-weight: 500;
-    padding: 9px 18px; border-radius: var(--radius);
-    cursor: pointer; border: 1px solid var(--border2);
-    background: var(--bg2); color: var(--text2);
+    padding: 9px 18px; border-radius: var(--radius); cursor: pointer;
+    border: 1px solid var(--border2); background: var(--bg2); color: var(--text2);
     transition: background .15s, color .15s, border-color .15s;
     text-decoration: none; display: inline-block;
   }
@@ -286,15 +203,6 @@
   .btn-primary { background: var(--purple); color: #fff; border-color: var(--purple); }
   .btn-primary:hover { background: #6c5fe6; border-color: #6c5fe6; color: #fff; }
 
-  /* ── STREAK MINI ── */
-  .streak-mini {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 12px; color: var(--text3); margin-left: auto;
-  }
-  .s-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border2); }
-  .s-dot.on { background: var(--amber); border-color: var(--amber); }
-
-  /* ── RESPONSIVE ── */
   @media (max-width: 500px) {
     .page { padding: 24px 16px 60px; }
     h1 { font-size: 22px; }
@@ -320,22 +228,19 @@
 
 <div class="page">
 
-  <!-- HEADER -->
   <div class="module-header">
     <div class="module-eyebrow">
       <span class="eyebrow-pill pill-num">Module 1 of 25</span>
-      <span class="eyebrow-pill pill-time">~45 min</span>
+      <span class="eyebrow-pill pill-time">~30 min</span>
       <span class="eyebrow-pill pill-type">Setup</span>
-      <span class="eyebrow-pill pill-win">Windows 11</span>
     </div>
     <h1>Your dev environment</h1>
-    <p class="module-desc">Before writing a single line of Python, you need the right tools installed and talking to each other. This module walks you through every step — from a blank machine to running your first program.</p>
+    <p class="module-desc">Before writing a single line of code, you need Python installed on your machine and a code editor ready to go. This module handles exactly that — nothing more, nothing less.</p>
   </div>
 
-  <!-- PROGRESS -->
   <div class="progress-section">
     <div class="progress-row">
-      <span id="prog-label">0 of 4 steps complete</span>
+      <span id="prog-label">0 of 5 steps complete</span>
       <span id="prog-pct">0%</span>
     </div>
     <div class="progress-bar-bg">
@@ -343,19 +248,16 @@
     </div>
   </div>
 
-  <!-- OBJECTIVES -->
   <div class="section-label">What you'll learn</div>
   <div class="objectives">
-    <div class="objective"><div class="obj-dot"></div><span>Understand what Python is and why it's the best language to start with</span></div>
-    <div class="objective"><div class="obj-dot"></div><span>Install Python 3 on Windows 11 — correctly, first time</span></div>
-    <div class="objective"><div class="obj-dot"></div><span>Install VS Code and add the Python extension</span></div>
-    <div class="objective"><div class="obj-dot"></div><span>Run your very first Python program and see it work</span></div>
-    <div class="objective"><div class="obj-dot"></div><span>Understand what a "file", "folder", and "terminal" mean in a developer context</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Understand what Python is and why it's the right first language for your goals</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Install Python 3 on Windows 11 — correctly, the first time</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Verify that Python installed correctly using the terminal</span></div>
+    <div class="objective"><div class="obj-dot"></div><span>Install VS Code — the code editor you'll use throughout this course</span></div>
   </div>
 
   <hr>
 
-  <!-- STEPS -->
   <div class="section-label">Steps — click each one when done</div>
   <div class="steps" id="steps-list">
 
@@ -365,15 +267,9 @@
           <svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <div class="step-body">
-          <div class="step-title">What is Python? (5-min read)</div>
-          <div class="step-desc">Python is a programming language — a way to give instructions to a computer. It reads like plain English, runs on everything, and powers Instagram, YouTube, NASA, and almost every AI system you've heard of. It's the best first language, period.</div>
-          <div class="step-meta">
-            <span class="step-time">~5 min</span>
-            <span class="step-hint" onclick="event.stopPropagation(); showHint(0)">Why Python and not another language?</span>
-          </div>
-          <div class="hint-box" id="hint-0" style="display:none; margin-top:10px; font-size:13px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:12px 14px; line-height:1.6;">
-            Python is beginner-friendly, but also the #1 language for AI and machine learning — so what you learn here directly leads to building AI tools later. JavaScript is also popular, but it's messier and web-focused. Python is clean, readable, and has the best libraries for data, AI, and automation.
-          </div>
+          <div class="step-title">What is Python — and why start here?</div>
+          <div class="step-desc">Python is a programming language — a precise set of instructions that a computer can follow. It reads almost like plain English, which makes it ideal for beginners. Python is used everywhere that matters: Instagram, YouTube, NASA, Netflix, and virtually every AI and machine learning system you've heard of. It's also the dominant language for AI development — which is exactly where this course is heading. Starting with Python means the skills you build here transfer directly into the advanced topics that come later. It's the right call.</div>
+          <div class="step-meta"><span class="step-time">~3 min</span></div>
         </div>
       </div>
     </div>
@@ -385,14 +281,12 @@
         </div>
         <div class="step-body">
           <div class="step-title">Download Python 3 from python.org</div>
-          <div class="step-desc">Go to <strong style="color:var(--purple-lt)">python.org/downloads</strong> and click the big yellow button. It automatically detects Windows and gives you the right version. Download the <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#c3e88d;padding:1px 5px;border-radius:4px">.exe</code> installer file.</div>
+          <div class="step-desc">Open your browser and go to <strong style="color:var(--purple-lt)">python.org/downloads</strong>. Click the large yellow "Download Python 3.x.x" button — it automatically detects Windows and gives you the right version. Download the <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#c3e88d;padding:1px 5px;border-radius:4px">.exe</code> installer file. This takes 1–2 minutes depending on your connection speed.</div>
           <div class="step-meta">
-            <span class="step-time">~5 min</span>
+            <span class="step-time">~4 min</span>
             <span class="step-hint" onclick="event.stopPropagation(); showHint(1)">Which version should I pick?</span>
           </div>
-          <div class="hint-box" id="hint-1" style="display:none; margin-top:10px; font-size:13px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:12px 14px; line-height:1.6;">
-            Always pick the latest stable Python 3 release — the big yellow button on python.org gives you this automatically. Avoid Python 2; it's old and unsupported. Don't worry about minor version numbers — 3.11, 3.12, 3.13 are all fine.
-          </div>
+          <div class="hint-box" id="hint-1">Always use the latest Python 3 release — the yellow button on python.org gives you this automatically. Avoid Python 2 entirely; it's old, unsupported, and incompatible with modern code. Don't worry about minor version numbers like 3.11 vs 3.12 — any recent Python 3 version is fine.</div>
         </div>
       </div>
     </div>
@@ -403,19 +297,18 @@
           <svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <div class="step-body">
-          <div class="step-title">Install Python — the one critical checkbox</div>
-          <div class="step-desc">Run the installer. Before clicking anything else — check the box that says <strong style="color:var(--amber)">"Add Python to PATH"</strong>. This is the single most common beginner mistake. Without it, your terminal won't know where Python is. Then click "Install Now".</div>
+          <div class="step-title">Install Python — one critical checkbox</div>
+          <div class="step-desc">Run the installer you just downloaded. Before clicking anything else, look at the bottom of the first screen.</div>
           <div class="focus-box">
             <span class="focus-icon">&#9650;</span>
-            <span><strong style="color:var(--amber)">Don't skip this:</strong> The PATH checkbox is at the bottom of the installer screen. It's easy to miss. Scroll down and check it before doing anything else.</span>
+            <span><strong style="color:var(--amber)">Check "Add Python to PATH" first.</strong> This checkbox is at the bottom of the installer screen and is easy to miss. Without it, your terminal will not be able to find Python and nothing will work. Check it, then click "Install Now".</span>
           </div>
+          <div class="step-desc" style="margin-top:8px;">Wait for installation to complete (about 1–2 minutes), then click Close.</div>
           <div class="step-meta">
-            <span class="step-time">~5 min</span>
-            <span class="step-hint" onclick="event.stopPropagation(); showHint(2)">What does PATH mean?</span>
+            <span class="step-time">~6 min</span>
+            <span class="step-hint" onclick="event.stopPropagation(); showHint(2)">What does "Add to PATH" mean?</span>
           </div>
-          <div class="hint-box" id="hint-2" style="display:none; margin-top:10px; font-size:13px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:12px 14px; line-height:1.6;">
-            PATH is a list your computer keeps of "where to look for programs". When you type <code style="font-family:var(--mono);font-size:11px;background:#0a0d14;color:#c3e88d;padding:1px 4px;border-radius:3px">python</code> in the terminal, Windows searches PATH to find the Python program. Without it, Windows doesn't know Python exists.
-          </div>
+          <div class="hint-box" id="hint-2">PATH is a list your computer keeps of "where to look for programs." When you type <code style="font-family:var(--mono);font-size:11px;background:#0a0d14;color:#c3e88d;padding:1px 4px;border-radius:3px">python</code> in the terminal, Windows searches that list to find the Python program. Without Python in PATH, Windows has no idea it exists and every command will fail with a "not recognized" error.</div>
         </div>
       </div>
     </div>
@@ -427,19 +320,18 @@
         </div>
         <div class="step-body">
           <div class="step-title">Verify Python installed correctly</div>
-          <div class="step-desc">Press <strong style="color:var(--text)">Win + R</strong>, type <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#c3e88d;padding:1px 5px;border-radius:4px">cmd</code>, press Enter. A black window appears — this is the terminal. Type the command below and press Enter.</div>
+          <div class="step-desc">Let's confirm everything worked. Press <strong style="color:var(--text)">Win + R</strong>, type <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#c3e88d;padding:1px 5px;border-radius:4px">cmd</code>, press Enter. A black terminal window opens. Type the command below and press Enter.</div>
           <div class="code-block">
             <span class="fn">python</span> --version<br>
-            <span class="cmt"># You should see: Python 3.x.x</span>
+            <span class="cmt"># Expected output: Python 3.x.x</span>
           </div>
           <button class="copy-btn" onclick="event.stopPropagation(); copyCode('python --version', this)">Copy</button>
-          <div class="step-meta" style="margin-top:10px;">
+          <div class="step-desc" style="margin-top:10px;">If you see a version number starting with 3 — Python is installed correctly. You can close the terminal window.</div>
+          <div class="step-meta">
             <span class="step-time">~3 min</span>
             <span class="step-hint" onclick="event.stopPropagation(); showHint(3)">"python is not recognized" — how to fix it</span>
           </div>
-          <div class="hint-box" id="hint-3" style="display:none; margin-top:10px; font-size:13px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:12px 14px; line-height:1.6;">
-            This error means Python wasn't added to PATH. Fix: open Windows Settings → Apps → Installed Apps → find Python → Modify → check "Add Python to PATH" → Modify. Or uninstall Python and reinstall, this time checking that box.
-          </div>
+          <div class="hint-box" id="hint-3">This error means Python was not added to PATH during installation. The fix: go to Windows Settings → Apps → Installed Apps → find Python → Modify → check "Add Python to PATH" → Modify. Alternatively, uninstall Python and reinstall it — this time checking the PATH box before clicking Install Now.</div>
         </div>
       </div>
     </div>
@@ -451,67 +343,21 @@
         </div>
         <div class="step-body">
           <div class="step-title">Download and install VS Code</div>
-          <div class="step-desc">Go to <strong style="color:var(--purple-lt)">code.visualstudio.com</strong> and download the Windows installer. VS Code is your code editor — where you'll write every program in this course. It's free, fast, and used by professional developers worldwide.</div>
+          <div class="step-desc">VS Code is the editor where you will write all your Python programs. It is free, fast, and used by professional developers worldwide. You will get a complete tour of it in Module 2 — for now, just get it installed.<br><br>
+          Go to <strong style="color:var(--purple-lt)">code.visualstudio.com</strong> and click the blue "Download for Windows" button. Run the installer, accept the defaults, and click Next through each screen. When VS Code opens automatically after installation, you are done.</div>
           <div class="step-meta">
-            <span class="step-time">~5 min</span>
+            <span class="step-time">~7 min</span>
             <span class="step-hint" onclick="event.stopPropagation(); showHint(4)">Why VS Code and not Notepad?</span>
           </div>
-          <div class="hint-box" id="hint-4" style="display:none; margin-top:10px; font-size:13px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:12px 14px; line-height:1.6;">
-            Notepad is a basic text editor. VS Code is a code editor — it highlights your code in color so you can read it, underlines mistakes as you type, autocompletes your code, and has a built-in terminal. It turns a wall of text into something you can navigate.
-          </div>
+          <div class="hint-box" id="hint-4">Notepad is a plain text editor — it has no idea what Python code looks like. VS Code is a code editor built for programming. It highlights your code in color so it's easier to read, underlines mistakes as you type, autocompletes common patterns, and has a built-in terminal so you can run your programs without switching windows. Writing Python in Notepad is like trying to write a novel in a calculator.</div>
         </div>
       </div>
     </div>
 
-    <div class="step" data-idx="5" onclick="toggleStep(5)">
-      <div class="step-top">
-        <div class="step-check">
-          <svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="step-body">
-          <div class="step-title">Install the Python extension in VS Code</div>
-          <div class="step-desc">Open VS Code. Click the <strong style="color:var(--text)">Extensions icon</strong> in the left sidebar (four squares). Search <strong style="color:var(--text)">"Python"</strong> and install the one made by Microsoft (it has millions of downloads). This gives VS Code Python superpowers: color highlighting, error detection, and a run button.</div>
-          <div class="step-meta">
-            <span class="step-time">~5 min</span>
-            <span class="step-hint" onclick="event.stopPropagation(); showHint(5)">What does this extension actually do?</span>
-          </div>
-          <div class="hint-box" id="hint-5" style="display:none; margin-top:10px; font-size:13px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:12px 14px; line-height:1.6;">
-            Without the extension, VS Code treats Python files like plain text. With it: keywords light up in color, typos get underlined in red as you type, you get autocomplete suggestions, and you can run your program by pressing the green play button — no terminal needed.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="step" data-idx="6" onclick="toggleStep(6)">
-      <div class="step-top">
-        <div class="step-check">
-          <svg viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="step-body">
-          <div class="step-title">Write and run your very first program</div>
-          <div class="step-desc">In VS Code: <strong style="color:var(--text)">File → New File</strong>. Save it as <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#c3e88d;padding:1px 5px;border-radius:4px">hello.py</code> inside a new folder called <code style="font-family:var(--mono);font-size:12px;background:#0a0d14;color:#c3e88d;padding:1px 5px;border-radius:4px">python-course</code> on your desktop. Type the code below exactly. Press the <strong style="color:var(--teal)">▶ play button</strong> in the top right corner. If you see your message printed in the terminal below — you're a programr.</div>
-          <div class="code-block">
-            <span class="cmt"># My first Python program</span><br>
-            <span class="fn">print</span>(<span class="str">"Hello! My coding journey starts now."</span>)<br>
-            <span class="fn">print</span>(<span class="str">"This is going to be awesome."</span>)
-          </div>
-          <button class="copy-btn" onclick="event.stopPropagation(); copyCode('# My first Python program\nprint(\"Hello! My coding journey starts now.\")\nprint(\"This is going to be awesome.\")', this)">Copy code</button>
-          <div class="step-meta" style="margin-top:10px;">
-            <span class="step-time">~10 min</span>
-            <span class="step-hint" onclick="event.stopPropagation(); showHint(6)">What does print() actually do?</span>
-          </div>
-          <div class="hint-box" id="hint-6" style="display:none; margin-top:10px; font-size:13px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); border-radius:var(--radius); padding:12px 14px; line-height:1.6;">
-            <code style="font-family:var(--mono);font-size:11px;background:#0a0d14;color:#82aaff;padding:1px 4px;border-radius:3px">print()</code> is a built-in Python function. A function is a named action your program can perform. <code style="font-family:var(--mono);font-size:11px;background:#0a0d14;color:#82aaff;padding:1px 4px;border-radius:3px">print()</code> specifically takes whatever you put inside the brackets and displays it in the terminal. It's how programs communicate with the person using them. You'll use it constantly.
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /steps -->
+  </div>
 
   <hr>
 
-  <!-- QUIZ -->
   <div class="section-label">Quick quiz — 3 questions</div>
   <div class="quiz" id="quiz">
 
@@ -527,62 +373,41 @@
     </div>
 
     <div class="quiz-card" id="qc-1">
-      <div class="quiz-q">2. What does this code do?&nbsp; <code>print("Hello world")</code></div>
+      <div class="quiz-q">2. How do you verify that Python installed correctly on Windows?</div>
       <div class="quiz-opts">
-        <button class="quiz-opt" onclick="answer(1, this, false)">Saves the text "Hello world" to a file</button>
-        <button class="quiz-opt" onclick="answer(1, this, false)">Searches the internet for "Hello world"</button>
-        <button class="quiz-opt" onclick="answer(1, this, true)">Displays the text "Hello world" in the terminal</button>
-        <button class="quiz-opt" onclick="answer(1, this, false)">Creates a variable named Hello world</button>
+        <button class="quiz-opt" onclick="answer(1, this, false)">Restart your computer and look for a Python icon on the desktop</button>
+        <button class="quiz-opt" onclick="answer(1, this, false)">Open VS Code and look for a Python logo in the corner</button>
+        <button class="quiz-opt" onclick="answer(1, this, true)">Open the terminal and run <code>python --version</code></button>
+        <button class="quiz-opt" onclick="answer(1, this, false)">Check the Windows Settings app under "Installed Programs"</button>
       </div>
       <div class="quiz-feedback" id="qf-1"></div>
     </div>
 
     <div class="quiz-card" id="qc-2">
-      <div class="quiz-q">3. What file extension do all Python programs use?</div>
+      <div class="quiz-q">3. Why is Python a good first language for someone who wants to eventually work with AI?</div>
       <div class="quiz-opts">
-        <button class="quiz-opt" onclick="answer(2, this, false)">.txt</button>
-        <button class="quiz-opt" onclick="answer(2, this, false)">.python</button>
-        <button class="quiz-opt" onclick="answer(2, this, true)">.py</button>
-        <button class="quiz-opt" onclick="answer(2, this, false)">.code</button>
+        <button class="quiz-opt" onclick="answer(2, this, false)">It's the only language that can run on Windows</button>
+        <button class="quiz-opt" onclick="answer(2, this, false)">It was specifically invented for AI and has no other uses</button>
+        <button class="quiz-opt" onclick="answer(2, this, true)">It's beginner-friendly and is the dominant language in AI and machine learning</button>
+        <button class="quiz-opt" onclick="answer(2, this, false)">It runs faster than all other programming languages</button>
       </div>
       <div class="quiz-feedback" id="qf-2"></div>
     </div>
 
   </div>
 
-  <!-- REWARD -->
   <div class="reward" id="reward">
     <div class="xp-badge">+50 XP</div>
-    <div class="reward-text"><strong>Module 1 complete!</strong> Your dev environment is ready. Python is installed, VS Code is set up, and you've run your first program. Time to start actually learning Python.</div>
+    <div class="reward-text"><strong>Module 1 complete!</strong> Python is installed and verified. VS Code is ready. In Module 2 you'll get a complete tour of VS Code and set it up properly before writing any real code.</div>
   </div>
 
-  <!-- NAV -->
   <div class="nav-btns">
     <a href="module-02.html" class="btn btn-primary">Next: Module 2 — Intro to VS Code →</a>
   </div>
 
-  <!-- BONUS CHALLENGE -->
-  <div id="bonus" style="display:none; margin-top:20px;">
-    <div class="section-label">Bonus challenge</div>
-    <div class="quiz-card">
-      <div class="quiz-q">Modify your hello.py program to print 5 lines — include your name, your favorite game, and what you want to build with Python one day. Run it and make sure all 5 lines appear in the terminal.</div>
-      <div style="margin-top:12px;">
-        <div class="code-block">
-          <span class="fn">print</span>(<span class="str">"Name: ???"</span>)<br>
-          <span class="fn">print</span>(<span class="str">"Favorite game: ???"</span>)<br>
-          <span class="fn">print</span>(<span class="str">"I want to build: ???"</span>)<br>
-          <span class="fn">print</span>(<span class="str">"Languages I know so far: Python"</span>)<br>
-          <span class="fn">print</span>(<span class="str">"Day 1 done."</span>)
-        </div>
-        <button class="copy-btn" onclick="copyCode('print(\"Name: ???\")\nprint(\"Favorite game: ???\")\nprint(\"I want to build: ???\")\nprint(\"Languages I know so far: Python\")\nprint(\"Day 1 done.\")', this)">Copy starter code</button>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /page -->
+</div>
 
 <script>
-  // ── Auth ──
   const STORAGE_KEY = 'pf_user';
   const currentUser = localStorage.getItem(STORAGE_KEY);
   if (!currentUser) window.location.replace('login.html');
@@ -593,25 +418,21 @@
     if (el) el.textContent = currentUser;
   });
 
-  const TOTAL_STEPS = 4;
+  const TOTAL_STEPS = 5;
   const TOTAL_QUIZ  = 3;
   const doneSteps   = new Set();
   const doneQuiz    = {};
 
-  // ── All data declarations first ──
-
   const feedbackOk = [
-    "Correct! Without PATH, the terminal searches for Python and can't find it — so all python commands fail with a confusing error.",
-    "Correct! print() is Python's way of outputting text. Whatever you put in the parentheses gets displayed in the terminal.",
-    "Correct! Every Python file ends in .py — that's how VS Code and your computer recognize it as Python code."
+    "Correct! Without PATH, the terminal searches for Python and can't find it — every python command fails with a confusing error.",
+    "Correct! Running python --version in the terminal is the definitive way to confirm Python is installed and accessible.",
+    "Correct! Python is beginner-friendly AND the dominant language for AI and machine learning — making it the ideal starting point for where this course is heading."
   ];
   const feedbackNo = [
     "Not quite. The PATH issue means the terminal can't locate Python at all — nothing runs until it's fixed.",
-    "Not quite. print() displays text on screen in the terminal — it's the most fundamental Python function you'll use.",
-    "Not quite. Python files use .py — for example, hello.py. The extension tells VS Code how to treat the file."
+    "Not quite. The terminal command python --version is the reliable way to verify — it confirms Python is installed and reachable.",
+    "Not quite. Python is beginner-friendly and also the #1 language in AI/ML, which is exactly why it's the right place to start."
   ];
-
-  // ── Functions ──
 
   function save() {
     try {
@@ -661,9 +482,8 @@
   function checkReward() {
     const allSteps = doneSteps.size === TOTAL_STEPS;
     const allQuiz  = Object.keys(doneQuiz).length === TOTAL_QUIZ;
-    const reward   = document.getElementById('reward');
     if (allSteps && allQuiz) {
-      reward.classList.add('show');
+      document.getElementById('reward').classList.add('show');
       try {
         const hub = JSON.parse(localStorage.getItem(key('course')) || '{}');
         hub.done  = hub.done || [];
@@ -675,40 +495,31 @@
 
   function showHint(i) {
     const box = document.getElementById('hint-' + i);
-    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
   }
 
   function copyCode(text, btn) {
     navigator.clipboard.writeText(text).then(() => {
       btn.textContent = 'Copied!';
       btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = btn.textContent.includes('code') ? 'Copy code' : 'Copy'; btn.classList.remove('copied'); }, 1800);
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
     }).catch(() => {
       btn.textContent = 'Select manually';
       setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
     });
   }
 
-  function showBonusChallenge() {
-    const el = document.getElementById('bonus');
-    el.style.display = el.style.display === 'none' ? 'block' : 'none';
-  }
-
-  // ── Init — runs after all functions and data are declared ──
   function init() {
-    // Load saved state
     try {
       const saved = JSON.parse(localStorage.getItem(key('m1')) || '{}');
       if (saved.steps) saved.steps.forEach(i => doneSteps.add(i));
       if (saved.quiz)  Object.assign(doneQuiz, saved.quiz);
     } catch(e) {}
 
-    // Restore step visuals
     document.querySelectorAll('.step').forEach((el, i) => {
       if (doneSteps.has(i)) el.classList.add('done');
     });
 
-    // Restore quiz visuals — only touch cards that have a saved answer
     Object.entries(doneQuiz).forEach(([qi, val]) => {
       const { correct, selected } = val;
       const card = document.getElementById('qc-' + qi);
